@@ -85,6 +85,7 @@ class Graph:
         plt.title("Zadanie 1b:Składowe spójne grafu")
         plt.show()
 
+
 g = Graph.generate_random_graph(10, 0.2)      #losowy graf o 10 wierzchołkach
 print("")
 print("Zadanie1_a: Wygenerowany graf (lista sąsiedztwa):")
