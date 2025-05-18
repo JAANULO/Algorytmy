@@ -2,7 +2,6 @@
 #test2
 
 
-
 import random
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -60,7 +59,9 @@ class Graph:
     #wizualizacja składowych spójnych z użyciem biblioteki NetworkX
     def visualize_components(self, components):
         G = nx.Graph()                                         # Tworzymy obiekt grafu
-        G.add_nodes_from(range(self.vertices))                 # Dodajemy wszystkie wierzchołki
+        G.add_nodes_from(range(self.vertices))  # Dodajemy wszystkie wierzchołki
+
+
 
         for u in self.adj_list:                                # Dodajemy krawędzie
             for v, _ in self.adj_list[u]:
@@ -76,16 +77,26 @@ class Graph:
 
         node_colors = [color_map[node] for node in G.nodes()] # Generujemy listę kolorów dla rysowania
         nx.draw(G, pos, node_color=node_colors, with_labels=True, cmap=plt.cm.tab20)  # Rysujemy graf
-        plt.title("Składowe spójne grafu")
-        plt.show()                                             # Wyświetlamy wykres
+                                                    # Wyświetlamy wykres
+        plt.title("Zadanie 1b:Składowe spójne grafu")
+        plt.show()
 
 
-print("Zadanie1_a_i:""\n")
 
-# --- Testowanie zadania 1
+    # --- Testowanie zadania 1
 g = Graph.generate_random_graph(10, 0.2)                       # Tworzymy losowy graf o 10 wierzchołkach
-components = g.find_connected_components()                     # Szukamy składowych spójnych
-print("Składowe spójne:", components)                          # Wyświetlamy wynik
+print("Zadanie1_a: Wygenerowany graf (lista sąsiedztwa):")
+for node in g.adj_list:
+    print(f"Wierzchołek {node}: {g.adj_list[node]}")  # Wyświetla listę sąsiedztwa
+print("\n")
+
+
+components = g.find_connected_components()
+# Szukamy składowych spójnych
+print("")
+print("Zadanie1_b:")
+print(components,"\n")  # Wyświetlamy wynik
+
 g.visualize_components(components)                             # Wizualizujemy składowe
 
 
@@ -170,12 +181,17 @@ g.add_edge(3, 4, 2)
 
 start, end = 0, 4
 path, dist = shortest_path(g, start, end)                         # Wyznaczamy ścieżkę między 0 a 4
-print(f"Najkrótsza ścieżka z {start} do {end}: {path}, Długość: {dist}")
+print("Zadanie2_a:")
+print(f"Najkrótsza ścieżka z {start} do {end}: {path}, Długość: {dist}","\n")
 
 sources = [0, 3]
 distances, _ = multi_source_dijkstra(g, sources)                  # Wyznaczamy odległości od 0 lub 3
-print("Odległości od najbliższego źródła:", distances)
+print("Zadanie2_b:")
+print("Odległości od najbliższego źródła:", distances,"\n")
 
+#c)
+print("Zadanie2_c:")
+print("Drzewo rozpinające utworzone przez ścieżki Dijkstry jest drzewem najkrótszych ścieżek od źródła. Jego własnością jest minimalizacja sumy wag ścieżek do wszystkich wierzchołków.","\n")
 
 
 #zadanie 3 – Minimalne Drzewo Rozpinające (MST)
@@ -252,5 +268,8 @@ g.add_edge(0, 3, 5)
 g.add_edge(1, 3, 15)
 g.add_edge(2, 3, 4)
 
-print("Minimalne Drzewo Rozpinające – Kruskal:", kruskal(g))
-print("Minimalne Drzewo Rozpinające – Prim:", prim(g))
+print("Zadanie3_a:")
+print("Minimalne Drzewo Rozpinające – Kruskal:", kruskal(g),"\n")  # Oznaczony wynik
+
+print("Zadanie3_b:")
+print("Minimalne Drzewo Rozpinające – Prim:", prim(g),"\n")
