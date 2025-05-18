@@ -1,6 +1,5 @@
 #lista5
 
-
 import random
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -17,18 +16,16 @@ class Graph:
 
     #dodawanie krawędzi nieskierowanej
     def add_edge(self, u, v, weight=1):
-
         self.adj_list[u].append((v, weight))                   #dodajemy sąsiada v do listy u (z wagą)
         self.adj_list[v].append((u, weight))                   #graf jest nieskierowany – dodajemy też odwrotnie
 
     #losowy grafu nieskierowy o określonej gęstości
-
+    @staticmethod
     def generate_random_graph(vertices, density=0.3):
-
         g = Graph(vertices)                                    #tworzymy pusty graf z daną liczbą wierzchołków
         for i in range(vertices):
             for j in range(i + 1, vertices):                   #przechodzimy po parach wierzchołków (bez duplikatów)
-                if random.random() < density:                  # Z prawdopodobieństwem density dodajemy krawędź
+                if random.random() < density:                  #z prawdopodobieństwem density dodajemy krawędź
                     g.add_edge(i, j)                           #dodajemy krawędź między i i j
         return g                                               #zwracamy utworzony graf
 
@@ -37,7 +34,6 @@ class Graph:
 
     #znajdowanie składowych spójnych grafu metodą BFS
     def find_connected_components(self):
-
         visited = set()                                        #zbiór odwiedzonych wierzchołków
         components = []                                        #lista składowych spójnych
 
@@ -60,12 +56,9 @@ class Graph:
 
     #wizualizacja składowych spójnych z użyciem biblioteki NetworkX
 
-    def visualize_components(self, components):
-
+    def visualize_components(self, components): #cc
         G = nx.Graph()                                         #tworzymy obiekt grafu
         G.add_nodes_from(range(self.vertices))  #dodawanie wszystkich wierzchołków
-
-
 
         for u in self.adj_list:                                #nowe krawędzie
             for v, _ in self.adj_list[u]:
@@ -85,6 +78,7 @@ class Graph:
         #wykres
         plt.title("Zadanie 1b:Składowe spójne grafu")
         plt.show()
+
 
 g = Graph.generate_random_graph(10, 0.2)      #losowy graf o 10 wierzchołkach
 print("")
