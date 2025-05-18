@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="af7b7f36-3eb3-4b15-be9f-c210aaa8508a" name="Changes" comment="Merge branch 'main' of https://github.com/JAANULO/Algorytmy" />
     <option name="SHOW_DIALOG" value="false" />
@@ -52,7 +55,7 @@
       <workItem from="1747530761317" duration="100000" />
       <workItem from="1747530884407" duration="17000" />
       <workItem from="1747608068898" duration="125000" />
-      <workItem from="1747608212909" duration="300000" />
+      <workItem from="1747608212909" duration="435000" />
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'main' of https://github.com/JAANULO/Algorytmy">
       <option name="closed" value="true" />
@@ -70,7 +73,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747608192163</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Merge branch 'main' of https://github.com/JAANULO/Algorytmy">
+      <option name="closed" value="true" />
+      <created>1747608647738</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1747608647738</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
