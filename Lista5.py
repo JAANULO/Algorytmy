@@ -9,20 +9,21 @@ import networkx as nx
 import heapq
 from collections import deque
 
-#zadanie 1 –
+#zadanie 1
+#a)
 
 class Graph:
     def __init__(self, vertices):
         self.vertices = vertices                               # Liczba wierzchołków w grafie
         self.adj_list = {v: [] for v in range(vertices)}       # Lista sąsiedztwa: każdy wierzchołek ma listę sąsiadów
 
-    # a) Dodawanie krawędzi nieskierowanej
+    #Dodawanie krawędzi nieskierowanej
     def add_edge(self, u, v, weight=1):
         self.adj_list[u].append((v, weight))                   # Dodajemy sąsiada v do listy u (z wagą)
         self.adj_list[v].append((u, weight))                   # Ponieważ graf jest nieskierowany – dodajemy też odwrotnie
 
-    # b) Generowanie losowego grafu nieskierowanego o określonej gęstości
-    @staticmethod
+    #Generowanie losowego grafu nieskierowanego o określonej gęstości
+
     def generate_random_graph(vertices, density=0.3):
         g = Graph(vertices)                                    # Tworzymy pusty graf z daną liczbą wierzchołków
         for i in range(vertices):
@@ -31,7 +32,10 @@ class Graph:
                     g.add_edge(i, j)                           # Dodajemy krawędź między i i j
         return g                                               # Zwracamy utworzony graf
 
-    # c) Znajdowanie składowych spójnych grafu metodą BFS
+
+#b)
+
+    #Znajdowanie składowych spójnych grafu metodą BFS
     def find_connected_components(self):
         visited = set()                                        # Zbiór odwiedzonych wierzchołków
         components = []                                        # Lista składowych spójnych
@@ -53,7 +57,7 @@ class Graph:
                 components.append(component)                   # Dodajemy nowo znalezioną składową
         return components
 
-    # d) Wizualizacja składowych spójnych z użyciem biblioteki NetworkX
+    #wizualizacja składowych spójnych z użyciem biblioteki NetworkX
     def visualize_components(self, components):
         G = nx.Graph()                                         # Tworzymy obiekt grafu
         G.add_nodes_from(range(self.vertices))                 # Dodajemy wszystkie wierzchołki
@@ -76,6 +80,8 @@ class Graph:
         plt.show()                                             # Wyświetlamy wykres
 
 
+print("Zadanie1_a_i:""\n")
+
 # --- Testowanie zadania 1
 g = Graph.generate_random_graph(10, 0.2)                       # Tworzymy losowy graf o 10 wierzchołkach
 components = g.find_connected_components()                     # Szukamy składowych spójnych
@@ -84,9 +90,9 @@ g.visualize_components(components)                             # Wizualizujemy s
 
 
 #zadanie 2  Algorytm Dijkstry
+#a)
 
-
-# a) Klasyczna implementacja algorytmu Dijkstry
+#Klasyczna implementacja algorytmu Dijkstry
 
 def dijkstra(graph, start):
     distances = {v: float('inf') for v in range(graph.vertices)}  # Inicjalizacja odległości jako nieskończoność
@@ -109,7 +115,8 @@ def dijkstra(graph, start):
     return distances, prev                                        # Zwracamy odległości i ścieżki
 
 
-# b) Odzyskiwanie ścieżki od punktu A do B
+#b)
+#Odzyskiwanie ścieżki od punktu A do B
 
 def shortest_path(graph, start, end):
     distances, prev = dijkstra(graph, start)
@@ -172,8 +179,9 @@ print("Odległości od najbliższego źródła:", distances)
 
 
 #zadanie 3 – Minimalne Drzewo Rozpinające (MST)
+#a)
 
-# a) Struktura Union-Find do algorytmu Kruskala
+#Struktura Union-Find do algorytmu Kruskala
 class UnionFind:
     def __init__(self, size):
         self.parent = list(range(size))                           # Każdy wierzchołek jest swoim rodzicem
@@ -190,7 +198,7 @@ class UnionFind:
             self.parent[root_y] = root_x
 
 
-# b) Algorytm Kruskala
+#Algorytm Kruskala
 
 def kruskal(graph):
     edges = []
@@ -210,8 +218,9 @@ def kruskal(graph):
 
     return mst
 
+#b)
 
-# c) Algorytm Prima
+#Algorytm Prima
 def prim(graph):
     visited = set()
     mst = []
