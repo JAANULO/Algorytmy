@@ -1,7 +1,6 @@
 #lista5
 #test2
 
-
 import random
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -18,98 +17,98 @@ class Graph:
 
     #Dodawanie krawędzi nieskierowanej
     def add_edge(self, u, v, weight=1):
-        self.adj_list[u].append((v, weight))                   # Dodajemy sąsiada v do listy u (z wagą)
-        self.adj_list[v].append((u, weight))                   # Ponieważ graf jest nieskierowany – dodajemy też odwrotnie
+        self.adj_list[u].append((v, weight))                   #dodajemy sąsiada v do listy u (z wagą)
+        self.adj_list[v].append((u, weight))                   #graf jest nieskierowany – dodajemy też odwrotnie
 
-    #Generowanie losowego grafu nieskierowanego o określonej gęstości
+    #losowy grafu nieskierowy o określonej gęstości
 
     def generate_random_graph(vertices, density=0.3):
-        g = Graph(vertices)                                    # Tworzymy pusty graf z daną liczbą wierzchołków
+        g = Graph(vertices)                                    #tworzymy pusty graf z daną liczbą wierzchołków
         for i in range(vertices):
-            for j in range(i + 1, vertices):                   # Przechodzimy po parach wierzchołków (bez duplikatów)
+            for j in range(i + 1, vertices):                   #przechodzimy po parach wierzchołków (bez duplikatów)
                 if random.random() < density:                  # Z prawdopodobieństwem density dodajemy krawędź
-                    g.add_edge(i, j)                           # Dodajemy krawędź między i i j
-        return g                                               # Zwracamy utworzony graf
+                    g.add_edge(i, j)                           #dodajemy krawędź między i i j
+        return g                                               #zwracamy utworzony graf
 
 
 #b)
 
-    #Znajdowanie składowych spójnych grafu metodą BFS
+    #znajdowanie składowych spójnych grafu metodą BFS
     def find_connected_components(self):
-        visited = set()                                        # Zbiór odwiedzonych wierzchołków
-        components = []                                        # Lista składowych spójnych
+        visited = set()                                        #zbiór odwiedzonych wierzchołków
+        components = []                                        #lista składowych spójnych
 
-        for v in range(self.vertices):                         # Iterujemy po wszystkich wierzchołkach
+        for v in range(self.vertices):                         #iteracja po wszystkich wierzchołkach
             if v not in visited:
-                queue = deque([v])                             # Kolejka do BFS
+                queue = deque([v])                             #kolejka do BFS
                 visited.add(v)
-                component = []                                 # Obecna składowa spójna
+                component = []                                 #obecna składowa spójna
 
                 while queue:
                     node = queue.popleft()
                     component.append(node)
-                    for neighbor, _ in self.adj_list[node]:    # Sprawdzamy sąsiadów bieżącego wierzchołka
+                    for neighbor, _ in self.adj_list[node]:    #sprawdzamy sąsiadów bieżącego wierzchołka
                         if neighbor not in visited:
                             visited.add(neighbor)
                             queue.append(neighbor)
 
-                components.append(component)                   # Dodajemy nowo znalezioną składową
+                components.append(component)                   #dodajemy nowo znalezioną składową
         return components
 
     #wizualizacja składowych spójnych z użyciem biblioteki NetworkX
     def visualize_components(self, components):
-        G = nx.Graph()                                         # Tworzymy obiekt grafu
-        G.add_nodes_from(range(self.vertices))  # Dodajemy wszystkie wierzchołki
+        G = nx.Graph()                                         #tworzymy obiekt grafu
+        G.add_nodes_from(range(self.vertices))  #dodawanie wszystkich wierzchołków
 
 
 
-        for u in self.adj_list:                                # Dodajemy krawędzie
+        for u in self.adj_list:                                #nowe krawędzie
             for v, _ in self.adj_list[u]:
-                if u < v:                                      # Unikamy duplikatów (bo graf nieskierowany)
+                if u < v:                                      #unikanie duplikatów (bo graf nieskierowany)
                     G.add_edge(u, v)
 
-        pos = nx.spring_layout(G)                              # Układ współrzędnych dla wierzchołków
-        color_map = {}                                         # Mapa kolorów wierzchołków wg składowych
+        pos = nx.spring_layout(G)                              #układ współrzędnych dla wierzchołków
+        color_map = {}                                         #mapa kolorów wierzchołków wg składowych
 
         for i, comp in enumerate(components):
             for node in comp:
-                color_map[node] = i                            # Przypisujemy kolor każdej składowej
+                color_map[node] = i                            #kolor dla każdej składowej
 
-        node_colors = [color_map[node] for node in G.nodes()] # Generujemy listę kolorów dla rysowania
-        nx.draw(G, pos, node_color=node_colors, with_labels=True, cmap=plt.cm.tab20)  # Rysujemy graf
-                                                    # Wyświetlamy wykres
+        node_colors = [color_map[node] for node in G.nodes()]                          #generowanie listy kolorów dla rysowania
+        nx.draw(G, pos, node_color=node_colors, with_labels=True, cmap=plt.cm.tab20)      #rysujemy graf
+
+        #wykres
         plt.title("Zadanie 1b:Składowe spójne grafu")
         plt.show()
 
 
 
-    # --- Testowanie zadania 1
-g = Graph.generate_random_graph(10, 0.2)                       # Tworzymy losowy graf o 10 wierzchołkach
+g = Graph.generate_random_graph(10, 0.2)                       #losowy graf o 10 wierzchołkach
 print("Zadanie1_a: Wygenerowany graf (lista sąsiedztwa):")
 for node in g.adj_list:
-    print(f"Wierzchołek {node}: {g.adj_list[node]}")  # Wyświetla listę sąsiedztwa
+    print(f"Wierzchołek {node}: {g.adj_list[node]}")
 print("\n")
 
 
 components = g.find_connected_components()
-# Szukamy składowych spójnych
+#szukanie składowych spójnych
 print("")
 print("Zadanie1_b:")
-print(components,"\n")  # Wyświetlamy wynik
+print(components,"\n")  #wynik
 
-g.visualize_components(components)                             # Wizualizujemy składowe
+g.visualize_components(components)        #wizualizujemy składowe
 
 
 #zadanie 2  Algorytm Dijkstry
 #a)
 
-#Klasyczna implementacja algorytmu Dijkstry
+#klasyczna implementacja algorytmu Dijkstry
 
 def dijkstra(graph, start):
-    distances = {v: float('inf') for v in range(graph.vertices)}  # Inicjalizacja odległości jako nieskończoność
-    distances[start] = 0                                          # Odległość startowa to 0
-    heap = [(0, start)]                                           # Kolejka priorytetowa (min-heap)
-    prev = {}                                                     # Mapa poprzedników (dla ścieżki)
+    distances = {v: float('inf') for v in range(graph.vertices)}  #inicjalizacja odległości jako nieskończoność
+    distances[start] = 0                                          #odległość startowa to 0
+    heap = [(0, start)]                                           #kolejka priorytetowa (min-heap)
+    prev = {}                                                     #mapa poprzedników (dla ścieżki)
 
     while heap:
         current_dist, u = heapq.heappop(heap)                     # Wybieramy wierzchołek o najmniejszej odległości
