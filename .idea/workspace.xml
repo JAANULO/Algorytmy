@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af7b7f36-3eb3-4b15-be9f-c210aaa8508a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lista5.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lista5.py" afterDir="false" />
-    </list>
+    <list default="true" id="af7b7f36-3eb3-4b15-be9f-c210aaa8508a" name="Changes" comment=" g" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -82,12 +79,33 @@
       <workItem from="1747529056177" duration="20000" />
       <workItem from="1747530761317" duration="100000" />
       <workItem from="1747530935506" duration="3000" />
-      <workItem from="1747571418641" duration="2574000" />
+      <workItem from="1747571418641" duration="2689000" />
     </task>
+    <task id="LOCAL-00001" summary=" g">
+      <option name="closed" value="true" />
+      <created>1747577554005</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1747577554005</updated>
+    </task>
+    <task id="LOCAL-00002" summary=" g">
+      <option name="closed" value="true" />
+      <created>1747577610486</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1747577610486</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value=" g" />
+    <option name="LAST_COMMIT_MESSAGE" value=" g" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Algorytmy$Lista5.coverage" NAME="Lista5 Coverage Results" MODIFIED="1747577483557" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
