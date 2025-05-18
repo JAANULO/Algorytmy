@@ -12,10 +12,10 @@ from collections import deque
 
 class Graph:
     def __init__(self, vertices):
-        self.vertices = vertices                               # Liczba wierzchołków w grafie
-        self.adj_list = {v: [] for v in range(vertices)}       # Lista sąsiedztwa: każdy wierzchołek ma listę sąsiadów
+        self.vertices = vertices                               #liczba wierzchołków w grafie
+        self.adj_list = {v: [] for v in range(vertices)}       #lista sąsiedztwa: każdy wierzchołek ma listę sąsiadów
 
-    #Dodawanie krawędzi nieskierowanej
+    #dodawanie krawędzi nieskierowanej
     def add_edge(self, u, v, weight=1):
 
         self.adj_list[u].append((v, weight))                   #dodajemy sąsiada v do listy u (z wagą)
@@ -85,8 +85,6 @@ class Graph:
         #wykres
         plt.title("Zadanie 1b:Składowe spójne grafu")
         plt.show()
-
-
 
 g = Graph.generate_random_graph(10, 0.2)      #losowy graf o 10 wierzchołkach
 print("")
