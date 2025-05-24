@@ -39,8 +39,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.25659.43" />
-        <option value="bundled-python-sdk-181015f7ab06-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.25659.43" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.26053.29" />
+        <option value="bundled-python-sdk-b1dbf8ef85a6-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.26053.29" />
       </set>
     </attachedChunks>
   </component>
@@ -60,7 +60,11 @@
       <workItem from="1747608813335" duration="982000" />
       <workItem from="1747609814786" duration="226000" />
       <workItem from="1747610130088" duration="33000" />
+<<<<<<< Updated upstream
       <workItem from="1747610216679" duration="8000" />
+=======
+      <workItem from="1747610270229" duration="4000" />
+>>>>>>> Stashed changes
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'main' of https://github.com/JAANULO/Algorytmy">
       <option name="closed" value="true" />
