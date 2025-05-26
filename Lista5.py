@@ -150,22 +150,27 @@ def dijkstra(graph, start):
 
     while heap:
 
-        current_dist, u = heapq.heappop(heap)                     #wybieramy wierzchołek o najmniejszej odległości
+        current_dist, u = heapq.heappop(heap)
+        #wybieramy wierzchołek o najmniejszej odległości
 
-        if current_dist > distances[u]:                           #pomijamy jeśli mamy lepszą ścieżkę
+        if current_dist > distances[u]:
+            #pomijamy jeśli mamy lepszą ścieżkę
             continue
 
+        for v, weight in graph.adj_list[u]:
+            #iterujemy po sąsiadach
+            new_dist = current_dist + weight
+            #obliczamy nową odległość
 
-        for v, weight in graph.adj_list[u]:                       #iterujemy po sąsiadach
-            new_dist = current_dist + weight                      #obliczamy nową odległość
-
-            if new_dist < distances[v]:                           #aktualizujemy jeśli krótsza
+            if new_dist < distances[v]:
+                #aktualizujemy jeśli krótsza
 
                 distances[v] = new_dist
                 prev[v] = u
-                heapq.heappush(heap, (new_dist, v))               #dodawanie do kolejki
-
-    return distances, prev                                        #zwracanie odległości i ścieżki
+                heapq.heappush(heap, (new_dist, v))
+                #dodawanie do kolejki
+    return distances, prev
+    #zwracanie odległości i ścieżki
 
 
 #b) Modyfikacja Dikstry

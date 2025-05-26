@@ -293,8 +293,18 @@ def visualize_mst(graph, mst_edges, title):
 if __name__ == "__main__":
 
     #Zadanie 1
+
+    g1 = Graph(7)
+    g1.add_edge(1, 3, 1)
+    g1.add_edge(1, 6, 1)
+    g1.add_edge(3, 6, 1)
+    g1.add_edge(6, 5, 1)
+    g1.add_edge(5, 2, 1)
+    g1.add_edge(5, 4, 1)
+    g1.add_edge(4, 2, 1)
+
     print("\nZadanie1_a: ")
-    g1 = Graph.generate_random_graph(10, 0.2)
+    #g1 = Graph.generate_random_graph(10, 0.2)
     print("Lista sąsiedztwa:")
     for node in g1.adj_list:
         print(f"Wierzchołek {node}: {g1.adj_list[node]}")
@@ -306,17 +316,27 @@ if __name__ == "__main__":
 
     #Zadanie 2
 
-    g2 = Graph(5)
-    g2.add_edge(0, 1, 4)
-    g2.add_edge(0, 2, 2)
+    # g2 = Graph(5)
+    # g2.add_edge(0, 1, 4)
+    # g2.add_edge(0, 2, 2)
+    # g2.add_edge(1, 2, 1)
+    # g2.add_edge(1, 3, 5)
+    # g2.add_edge(2, 3, 8)
+    # g2.add_edge(2, 4, 10)
+    # g2.add_edge(3, 4, 2)
+
+    g2 = Graph(9)
     g2.add_edge(1, 2, 1)
     g2.add_edge(1, 3, 5)
-    g2.add_edge(2, 3, 8)
-    g2.add_edge(2, 4, 10)
-    g2.add_edge(3, 4, 2)
+    g2.add_edge(2, 4, 8)
+    g2.add_edge(3, 5, 1)
+    g2.add_edge(3, 4, 1)
+    g2.add_edge(4, 5, 4)
+    g2.add_edge(4, 6, 2)
+    g2.add_edge(5, 6, 7)
 
     #a
-    start, end = 0, 4
+    start, end = 1, 6
     path, dist = shortest_path(g2, start, end)
     print("\nZadanie2_a: ")
     print(f"Najkrótsza ścieżka z {start} do {end}: {path}, Długość: {dist}")
@@ -331,13 +351,22 @@ if __name__ == "__main__":
     #Zadanie 3
 
     #Kruskal
-    g3 = Graph(4)
-    g3.add_edge(0, 1, 10)
-    g3.add_edge(0, 2, 6)
-    g3.add_edge(0, 3, 5)
-    g3.add_edge(1, 3, 15)
-    g3.add_edge(2, 3, 4)
+    # g3 = Graph(4)
+    # g3.add_edge(0, 1, 10)
+    # g3.add_edge(0, 2, 6)
+    # g3.add_edge(0, 3, 5)
+    # g3.add_edge(1, 3, 15)
+    # g3.add_edge(2, 3, 4)
 
+    g3 = Graph(9)
+    g3.add_edge(1, 2, 1)
+    g3.add_edge(1, 3, 5)
+    g3.add_edge(2, 4, 8)
+    g3.add_edge(3, 5, 1)
+    g3.add_edge(3, 4, 1)
+    g3.add_edge(4, 5, 4)
+    g3.add_edge(4, 6, 2)
+    g3.add_edge(5, 6, 7)
 
     mst_kruskal = kruskal(g3)
     print("\nZadanie3: ")
