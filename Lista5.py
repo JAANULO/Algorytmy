@@ -13,66 +13,98 @@ from collections import deque
 
 class Graph:
     def __init__(self, vertices):
-        self.vertices = vertices                               #liczba wierzchołków w grafie
-        self.adj_list = {v: [] for v in range(vertices)}       #lista sąsiedztwa: każdy wierzchołek ma listę sąsiadów
+        self.vertices = vertices
+        #liczba wierzchołków w grafie
+        self.adj_list = {v: [] for v in range(vertices)}
+        #lista ()sąsiedztwa: każdy wierzchołek ma listę sąsiadów
+
 
     #dodawanie krawędzi nieskierowanej
     def add_edge(self, u, v, weight=1):
-        self.adj_list[u].append((v, weight))                   #dodajemy sąsiada v do listy u (z wagą)
-        self.adj_list[v].append((u, weight))                   #graf jest nieskierowany – dodajemy też odwrotnie
+        self.adj_list[u].append((v, weight))
+        #dodajemy sąsiada v do listy (z wagą)
+        self.adj_list[v].append((u, weight))
+        #odwrotnie
+        #graf jest nieskierowany
+
 
     #losowy grafu nieskierowy o określonej gęstości
     @staticmethod
     def generate_random_graph(vertices, density=0.3):
-        g = Graph(vertices)                                    #tworzymy pusty graf z daną liczbą wierzchołków
-        for i in range(vertices):
-            for j in range(i + 1, vertices):                   #przechodzimy po parach wierzchołków (bez duplikatów)
-                if random.random() < density:                  #z prawdopodobieństwem density dodajemy krawędź
-                    g.add_edge(i, j)                           #dodajemy krawędź między i i j
-        return g                                               #zwracamy utworzony graf
+        #density - proawdopodobienstwo połaczenia miedzy dwoma wierzchołkami
+        g = Graph(vertices)
+        #tworzymy pusty graf z daną liczbą wierzchołków
+        for i in range(vertices): #po wierzchołkach
+            for j in range(i + 1, vertices):  #po parach wierzchołków (bez powt)
+                #przechodzimy po parach wierzchołków (bez duplikatów)
+                if random.random() < density:
+                    #z prawdopodobieństwem density dodajemy krawędź
+                    g.add_edge(i, j)
+                    #dodajemy krawędź między i i j
+
+        return g
+        #zwracamy utworzony graf
 
 
 #b)
 
     #znajdowanie składowych spójnych grafu metodą BFS
     def find_connected_components(self):
-        visited = set()                                        #zbiór odwiedzonych wierzchołków
-        components = []                                        #lista składowych spójnych
+        visited = set()
+        #zbiór odwiedzonych wierzchołków
+        components = []
+        #lista składowych spójnych
 
-        for v in range(self.vertices):                         #iteracja po wszystkich wierzchołkach
+        for v in range(self.vertices):
+            #iteracja po wszystkich wierzchołkach
             if v not in visited:
-                queue = deque([v])                             #kolejka do BFS
+                queue = deque([v])
+                #kolejka do BFS
                 visited.add(v)
-                component = []                                 #obecna składowa spójna
+                component = []
+                #obecna składowa spójna
 
                 while queue:
                     node = queue.popleft()
                     component.append(node)
-                    for neighbor, _ in self.adj_list[node]:    #sprawdzamy sąsiadów bieżącego wierzchołka
-                        if neighbor not in visited:
-                            visited.add(neighbor)
-                            queue.append(neighbor)
+                    for neighbor, _ in self.adj_list[node]:
+                        #sprawdzamy sąsiadów bieżącego wierzchołka
 
-                components.append(component)                   #dodajemy nowo znalezioną składową
+                        if neighbor not in visited:
+                            #czy sasiad nie byl odwiedzony
+                            visited.add(neighbor)
+                            #dodanie go do odwiedzonych
+                            queue.append(neighbor)
+                            #dodanie sasiada do kolejki
+
+                components.append(component)
+                #dodajemy nowo znalezioną składową
         return components
 
     #wizualizacja składowych spójnych z użyciem biblioteki NetworkX
 
     def visualize_components(self, components): #cc
-        G = nx.Graph()                                         #tworzymy obiekt grafu
-        G.add_nodes_from(range(self.vertices))  #dodawanie wszystkich wierzchołków
+        G = nx.Graph()  #graf                                        #tworzymy obiekt grafu
+        G.add_nodes_from(range(self.vertices))
+        #dodawanie wszystkich wierzchołków
 
-        for u in self.adj_list:                                #nowe krawędzie
+        for u in self.adj_list: #po wierzcholkach
+            #nowe krawędzie
             for v, _ in self.adj_list[u]:
-                if u < v:                                      #unikanie duplikatów (bo graf nieskierowany)
-                    G.add_edge(u, v)
+                #po siasiadach
+                if u < v:
+                    #unikanie duplikatów (bo graf nieskierowany)
+                    G.add_edge(u, v) #dodanie krawedzi do grafu
 
-        pos = nx.spring_layout(G)                              #układ współrzędnych dla wierzchołków
-        color_map = {}                                         #mapa kolorów wierzchołków wg składowych
+        pos = nx.spring_layout(G)
+        #pozyscja na grfie
+        color_map = {}
+        #kolory
 
-        for i, comp in enumerate(components):
+        for i, comp in enumerate(components): #po skladowych
             for node in comp:
-                color_map[node] = i                            #kolor dla każdej składowej
+                color_map[node] = i
+                #kolor dla każdej składowej
 
         node_colors = [color_map[node] for node in G.nodes()]                          #generowanie listy kolorów dla rysowania
         nx.draw(G, pos, node_color=node_colors, with_labels=True, cmap=plt.cm.tab20)      #rysujemy graf
@@ -82,10 +114,11 @@ class Graph:
         plt.show()
 
 
-g = Graph.generate_random_graph(10, 0.2)      #losowy graf o 10 wierzchołkach
+g = Graph.generate_random_graph(10, 0.2)
+#losowy graf o 10 wierzchołkach
 print("")
 print("Zadanie1_a: Wygenerowany graf (lista sąsiedztwa):")
-for node in g.adj_list:
+for node in g.adj_list: #po wierzchołkach
     print(f"Wierzchołek {node}: {g.adj_list[node]}")
 
 
@@ -106,10 +139,14 @@ g.visualize_components(components)        #wizualizujemy składowe
 
 def dijkstra(graph, start):
 
-    distances = {v: float('inf') for v in range(graph.vertices)}  #inicjalizacja odległości jako nieskończoność
-    distances[start] = 0                                          #odległość startowa to 0
-    heap = [(0, start)]                                           #kolejka priorytetowa (min-heap)
-    prev = {}                                                     #mapa poprzedników (dla ścieżki)
+    distances = {v: float('inf') for v in range(graph.vertices)}
+    #inicjalizacja odległości jako nieskończoność
+    distances[start] = 0
+    #odległość startowa to 0
+    heap = [(0, start)]
+    #kolejka priorytetowa (min-heap)
+    prev = {}
+    #mapa poprzedników (dla ścieżki)
 
     while heap:
 
@@ -211,17 +248,19 @@ print("Drzewo rozpinające utworzone przez ścieżki Dijkstry jest drzewem najkr
 class UnionFind:
     def __init__(self, size):
 
-        self.parent = list(range(size))                           #każdy wierzchołek jest swoim rodzicem
+        self.parent = list(range(size))
+        #każdy wierzchołek jest swoim rodzicem
 
     def find(self, x):
-
-        if self.parent[x] != x:                                   #znajdujemy korzeń drzewa z kompresją ścieżki
+        if self.parent[x] != x:
+            #znajdujemy korzeń drzewa z kompresją ścieżki
             self.parent[x] = self.find(self.parent[x])
         return self.parent[x]
 
     def union(self, x, y):
 
-        root_x = self.find(x)                                     #łączenie dwóch drzew (jeśli mają różne korzenie)
+        root_x = self.find(x)
+        #łączenie dwóch drzew (jeśli mają różne korzenie)
         root_y = self.find(y)
         if root_x != root_y:
             self.parent[root_y] = root_x
@@ -230,20 +269,25 @@ class UnionFind:
 #Algorytm Kruskala
 
 def kruskal(graph):
-    edges = []
+    edges = [] #lista krawedzi
 
     for u in graph.adj_list:
-
+        #po wiezchołkach
         for v, w in graph.adj_list[u]:
-            if u < v:                                             #unikanie duplikatów
+            #po krawedzi z v (w waga)
+            if u < v:
+                #unikanie duplikatów
                 edges.append((w, u, v))
+                #dodanie do listy
 
-    edges.sort()                                                  #sortowanie krawędzi po wadze
+    edges.sort()
+    #sortowanie krawędzi po wadze
     uf = UnionFind(graph.vertices)
     mst = []
 
     for w, u, v in edges:
-        if uf.find(u) != uf.find(v):                              #jesli nie tworzy cyklu, dodaj do MST
+        if uf.find(u) != uf.find(v):
+            #jesli nie tworzy cyklu, dodaj do MST
             uf.union(u, v)
             mst.append((u, v, w))
 
@@ -258,16 +302,19 @@ def prim(graph):
     mst = []
     heap = []
 
-    start = next(iter(graph.adj_list))                            #zaczynanie od dowolnego wierzchołka
+    start = next(iter(graph.adj_list))
+    #zaczynanie od dowolnego wierzchołka
     visited.add(start)
 
     for v, w in graph.adj_list[start]:
-        heapq.heappush(heap, (w, start, v))                       #dodawanie sąsiadów do kolejki
+        heapq.heappush(heap, (w, start, v))
+        #dodawanie sąsiadów do kolejki
 
     while heap:
 
         w, u, v = heapq.heappop(heap)
-        if v not in visited:                                      #jeśli nieodwiedzony, dodaj do MST
+        if v not in visited:
+            #jeśli nieodwiedzony, dodaj do MST
             visited.add(v)
             mst.append((u, v, w))
 
