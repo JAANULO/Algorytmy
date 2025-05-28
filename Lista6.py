@@ -1,20 +1,31 @@
 #lista6
-import math
-import os
+
 from collections import defaultdict
 
 
-# ===================== Zadanie 1 =====================
+#zadanie 1
+#a
+
+
+# funkcja obliczająca klasyczną odległość Hamminga
+# liczy ile znaków różni się między dwoma ciągami tej samej długości
 def hamming_distance(s1, s2):
-    if len(s1) != len(s2):
+    if len(s1) != len(s2):  # ciągi muszą być tej samej długości
         raise ValueError("Ciągi muszą być tej samej długości")
+    # zliczamy ile razy znaki na tych samych pozycjach się różnią
     return sum(c1 != c2 for c1, c2 in zip(s1, s2))
 
 
+#b
+
+
+# funkcja modyfikująca odległość Hamminga z uwzględnieniem sąsiedztwa klawiatury
+# sąsiadujące litery mają wagę 1, inne 2
 def modified_hamming(s1, s2):
     if len(s1) != len(s2):
         raise ValueError("Ciągi muszą być tej samej długości")
 
+    # mapa sąsiedztwa klawiszy na klawiaturze QWERTY
     keyboard = {
         'q': {'w', 'a'}, 'w': {'q', 'e', 's'}, 'e': {'w', 'r', 'd'},
         'r': {'e', 't', 'f'}, 't': {'r', 'y', 'g'}, 'y': {'t', 'u', 'h'},
@@ -29,17 +40,24 @@ def modified_hamming(s1, s2):
     }
 
     distance = 0
+    # porównujemy znaki z małych liter
     for c1, c2 in zip(s1.lower(), s2.lower()):
         if c1 == c2:
-            continue
+            continue  # identyczne znaki nie zwiększają odległości
         if c2 in keyboard.get(c1, set()):
-            distance += 1
+            distance += 1  # sąsiednie znaki
         else:
-            distance += 2
+            distance += 2  # różne znaki
     return distance
 
 
-# Przykładowy słownik 100 słów (skrócony dla demonstracji)
+#c
+
+
+# przykładowy słownik 100 słów
+# różne długości słów, polskie rzeczowniki i produkty
+# (skrócony komentarz, pełna lista poniżej)
+
 dictionary = [
     "mama", "tata", "dom", "kot", "pies", "nawa", "lampa", "krzesło",
     "książka", "komputer", "telefon", "szklanka", "okno", "drzwi", "samochód",
@@ -52,33 +70,36 @@ dictionary = [
     "pomidor", "ogórek", "cebula", "czosnek", "papryka", "sałata", "kapusta", "kalafior",
     "brokuł", "dynia", "bakłażan", "szpinak", "rzodkiewka", "fasola", "groch", "soczewica",
     "ryż", "makaron", "chleb", "bułka", "ser", "mleko", "masło", "jogurt", "kefir",
-    "szynka", "kiełbasa", "jajko", "sok", "woda", "herbata", "kawa", "piwo", "wino"
-]
+    "szynka", "kiełbasa", "jajko", "sok", "woda", "herbata", "kawa", "piwo", "wino" ]
 
 
+# funkcja znajduje najbardziej podobne słowa ze słownika na podstawie odległości Hamminga (zmodyfikowanej)
 def find_similar_words(input_word):
     if input_word in dictionary:
-        return "OK"
+        return "OK"  # słowo istnieje w słowniku
 
     similar = []
     for word in dictionary:
-        if len(word) == len(input_word):
+        if len(word) == len(input_word):  # tylko słowa tej samej długości
             dist = modified_hamming(input_word, word)
             similar.append((dist, word))
 
+    # sortujemy po odległości
     similar.sort()
-    return [word for _, word in similar[:3]]
+    return [word for _, word in similar[:3]]  # zwracamy 3 najlepsze
 
 
-# ===================== Zadanie 2 =====================
-# Częstości liter dla języków (przykładowe dane)
+#zadanie 2
+#a
+
+# częstości liter dla 3 języków (procentowy udział liter)
 freq = {
     'polish': {
-        'a': 8.91, 'b': 1.47, 'c': 3.96, 'd': 3.25, 'e': 7.66, 'f': 0.30,
-        'g': 1.42, 'h': 1.08, 'i': 8.21, 'j': 2.28, 'k': 3.51, 'l': 2.10,
-        'm': 2.80, 'n': 5.52, 'o': 7.75, 'p': 3.13, 'q': 0.14, 'r': 4.69,
-        's': 4.32, 't': 3.98, 'u': 2.50, 'v': 0.04, 'w': 4.65, 'x': 0.02,
-        'y': 3.76, 'z': 5.64
+        'a': 8.91, 'b': 1.47, 'c': 3.96, 'd': 3.25, 'e': 7.66,
+        'f': 0.30, 'g': 1.42, 'h': 1.08, 'i': 8.21, 'j': 2.28,
+        'k': 3.51, 'l': 2.10, 'm': 2.80, 'n': 5.52, 'o': 7.75,
+        'p': 3.13, 'q': 0.14, 'r': 4.69, 's': 4.32, 't': 3.98,
+        'u': 2.50, 'v': 0.04, 'w': 4.65, 'x': 0.02, 'y': 3.76, 'z': 5.64
     },
     'english': {
         'a': 8.167, 'b': 1.492, 'c': 2.782, 'd': 4.253, 'e': 12.702,
@@ -88,20 +109,25 @@ freq = {
         'u': 2.758, 'v': 0.978, 'w': 2.360, 'x': 0.150, 'y': 1.974, 'z': 0.074
     },
     'german': {
-        'a': 6.51, 'b': 1.89, 'c': 3.06, 'd': 5.08, 'e': 17.40, 'f': 1.66,
-        'g': 3.01, 'h': 4.76, 'i': 7.55, 'j': 0.27, 'k': 1.21, 'l': 3.44,
-        'm': 2.53, 'n': 9.78, 'o': 2.51, 'p': 0.79, 'q': 0.02, 'r': 7.00,
-        's': 7.27, 't': 6.15, 'u': 4.35, 'v': 0.67, 'w': 1.89, 'x': 0.03,
-        'y': 0.04, 'z': 1.13
+        'a': 6.51, 'b': 1.89, 'c': 3.06, 'd': 5.08, 'e': 17.40,
+        'f': 1.66, 'g': 3.01, 'h': 4.76, 'i': 7.55, 'j': 0.27,
+        'k': 1.21, 'l': 3.44, 'm': 2.53, 'n': 9.78, 'o': 2.51,
+        'p': 0.79, 'q': 0.02, 'r': 7.00, 's': 7.27, 't': 6.15,
+        'u': 4.35, 'v': 0.67, 'w': 1.89, 'x': 0.03, 'y': 0.04, 'z': 1.13
     }
 }
 
-vowels = {'a', 'e', 'i', 'o', 'u', 'y'}
+
+vowels = {'a', 'e', 'i', 'o', 'u', 'y'}  # zestaw samogłosek
 
 
+
+#b
+
+# funkcja zamienia tekst na procentowy rozkład liter
 def text_to_freq(text):
-    text = ''.join([c.lower() for c in text if c.isalpha()])
-    total = len(text) or 1  # Zabezpieczenie przed dzieleniem przez zero
+    text = ''.join([c.lower() for c in text if c.isalpha()])  # tylko litery, małe
+    total = len(text) or 1  # zabezpieczenie przed 0
     freq_dict = defaultdict(float)
     for c in text:
         freq_dict[c] += 1
@@ -109,6 +135,9 @@ def text_to_freq(text):
         freq_dict[c] = (freq_dict[c] / total) * 100
     return freq_dict
 
+
+# funkcja porównuje rozkład liter z językiem
+# im mniejsza suma różnic, tym bliżej
 
 def compare_freq(text_freq, lang_freq):
     distance = 0
@@ -118,6 +147,7 @@ def compare_freq(text_freq, lang_freq):
     return distance
 
 
+# funkcja rozpoznająca język na podstawie częstości liter
 def detect_language(text):
     text_freq = text_to_freq(text)
     min_dist = float('inf')
@@ -130,7 +160,9 @@ def detect_language(text):
     return best_lang.capitalize()
 
 
-# Wersja z samogłoskami i spółgłoskami
+#c
+
+# funkcja uproszczona - zlicza tylko samogłoski i spółgłoski
 def simplified_freq(text):
     text = ''.join([c.lower() for c in text if c.isalpha()])
     total = len(text) or 1
@@ -138,6 +170,7 @@ def simplified_freq(text):
     return (vowels_count / total * 100, (total - vowels_count) / total * 100)
 
 
+# procentowe udziały samogłosek i spółgłosek dla języków
 lang_simplified = {
     'polish': (38.5, 61.5),
     'english': (39.9, 60.1),
@@ -145,6 +178,7 @@ lang_simplified = {
 }
 
 
+# funkcja wykrywa język używając tylko samogłosek/spółgłosek
 def detect_language_simplified(text):
     text_vowels, text_consonants = simplified_freq(text)
     min_dist = float('inf')
@@ -157,7 +191,10 @@ def detect_language_simplified(text):
     return best_lang.capitalize()
 
 
-# ===================== Zadanie 3 =====================
+#zadanie 3
+#a
+
+# najdłuższy wspólny podciąg bez przerw (substring)
 def longest_common_substring(s1, s2):
     m, n = len(s1), len(s2)
     dp = [[0] * (n + 1) for _ in range(m + 1)]
@@ -172,6 +209,9 @@ def longest_common_substring(s1, s2):
     return max_len
 
 
+#b
+
+# najdłuższy wspólny podciąg z przerwami (subsequence)
 def longest_common_subsequence(s1, s2):
     m, n = len(s1), len(s2)
     dp = [[0] * (n + 1) for _ in range(m + 1)]
@@ -184,6 +224,9 @@ def longest_common_subsequence(s1, s2):
     return dp[m][n]
 
 
+#d
+
+# odległość Levenshteina – liczba operacji potrzebna do przekształcenia jednego ciągu w drugi
 def levenshtein_distance(s1, s2):
     m, n = len(s1), len(s2)
     dp = [[0] * (n + 1) for _ in range(m + 1)]
@@ -201,21 +244,22 @@ def levenshtein_distance(s1, s2):
             )
     return dp[m][n]
 
-
-# ===================== Przykłady użycia =====================
 if __name__ == "__main__":
-    print("=== Zadanie 1 ===")
-    print("Hamming:", hamming_distance("mama", "nawa"))  # 3
-    print("Modified Hamming:", modified_hamming("mama", "nawa"))  # 3
-    print("Podobne słowa:", find_similar_words("mama"))  # OK
+    print("Zadanie_1a: ")
+    print("Hamming:", hamming_distance("mama", "nawa"))  # wynik: 3
+    print("\nZadanie 1b: ")
+    print("Modified Hamming:", modified_hamming("mama", "nawa"))  # wynik: 3 lub inny, zależnie od mapy
+    print("\nZadanie 1c: ")
     print("Podobne słowa:", find_similar_words("maaa"))  # np. ['mama', 'nawa', 'tata']
 
-    print("\n=== Zadanie 2 ===")
-    text_pl = "Litwo ojczyzno moja ty jesteś jak zdrowie"
-    print("Język:", detect_language(text_pl))  # Polish
-    print("Język (uproszczone):", detect_language_simplified(text_pl))  # Polish
+    print("\nZadanie_2b: ")
+    tekst = "Litwo ojczyzno moja ty jesteś jak zdrowie"
+    print("Język:", detect_language(tekst))  # Polish
+    print("Język uproszczony:", detect_language_simplified(tekst))  # Polish
 
-    print("\n=== Zadanie 3 ===")
+    print("\nZadanie_3a: ")
     print("LCSubstring:", longest_common_substring("konwalia", "zawalina"))  # 4
+    print("\nZadanie_3b: ")
     print("LCS:", longest_common_subsequence("ApqBCrDeFt", "tABuCoDewxFyz"))  # 6
+    print("\nZadanie_3d: ")
     print("Levenshtein:", levenshtein_distance("kitten", "sitting"))  # 3
