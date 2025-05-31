@@ -1,76 +1,59 @@
-#lista6
+# lista6
 
 from collections import defaultdict
 import unicodedata
+import random
 
-
-#usuwanie polskich znaków
+# Funkcja usuwająca polskie znaki diakrytyczne
 def usun_polskie_znaki(tekst):
     return ''.join(
         c for c in unicodedata.normalize('NFD', tekst)
-        if unicodedata.category(c) != 'Mn' )
+        if unicodedata.category(c) != 'Mn'
+    )
 
-
-#zadanie 1
-#a
-
-
-# funkcja obliczająca klasyczną odległość Hamminga
-# liczy ile znaków różni się między dwoma ciągami tej samej długości
+# Zadanie 1a: Odległość Hamminga
 def Hamminga_odleglosc(s1, s2):
-    if len(s1) != len(s2):  # ciągi muszą być tej samej długości
+    if len(s1) != len(s2):
         raise ValueError("Ciągi muszą być tej samej długości")
-    # zliczamy ile razy znaki na tych samych pozycjach się różnią
     return sum(c1 != c2 for c1, c2 in zip(s1, s2))
 
-
-#b
-
-
-# funkcja modyfikująca odległość Hamminga z uwzględnieniem sąsiedztwa klawiatury
-# sąsiadujące litery mają wagę 1, inne 2
+# Zadanie 1b: Modyfikowana odległość Hamminga z uwzględnieniem klawiatury
 def modyfikowana_Hamminga(s1, s2):
     if len(s1) != len(s2):
         raise ValueError("Ciągi muszą być tej samej długości")
 
-    # mapa sąsiedztwa klawiszy na klawiaturze QWERTY
+    # Rozszerzona mapa klawiatury QWERTY
     klawiatura = {
-        'q': {'w', 'a'}, 'w': {'q', 'e', 's'}, 'e': {'w', 'r', 'd'},
-        'r': {'e', 't', 'f'}, 't': {'r', 'y', 'g'}, 'y': {'t', 'u', 'h'},
-        'u': {'y', 'i', 'j'}, 'i': {'u', 'o', 'k'}, 'o': {'i', 'p', 'l'},
-        'p': {'o'}, 'a': {'q', 's', 'z'}, 's': {'a', 'w', 'd', 'x'},
-        'd': {'s', 'e', 'f', 'c'}, 'f': {'d', 'r', 'g', 'v'},
-        'g': {'f', 't', 'h', 'b'}, 'h': {'g', 'y', 'j', 'n'},
-        'j': {'h', 'u', 'k', 'm'}, 'k': {'j', 'i', 'l'},
-        'l': {'k', 'o'}, 'z': {'a', 'x'}, 'x': {'z', 's', 'c'},
+        'q': {'w', 'a', 's'}, 'w': {'q', 'e', 's', 'a'}, 'e': {'w', 'r', 'd', 's'},
+        'r': {'e', 't', 'f', 'd'}, 't': {'r', 'y', 'g', 'f'}, 'y': {'t', 'u', 'h', 'g'},
+        'u': {'y', 'i', 'j', 'h'}, 'i': {'u', 'o', 'k', 'j'}, 'o': {'i', 'p', 'l', 'k'},
+        'p': {'o', 'l'}, 'a': {'q', 's', 'z', 'w'}, 's': {'a', 'w', 'd', 'x', 'z', 'e'},
+        'd': {'s', 'e', 'f', 'c', 'x', 'r'}, 'f': {'d', 'r', 'g', 'v', 'c', 't'},
+        'g': {'f', 't', 'h', 'b', 'v', 'y'}, 'h': {'g', 'y', 'j', 'n', 'b', 'u'},
+        'j': {'h', 'u', 'k', 'm', 'n', 'i'}, 'k': {'j', 'i', 'l', 'm', 'o'},
+        'l': {'k', 'o', 'p'}, 'z': {'a', 'x'}, 'x': {'z', 's', 'c'},
         'c': {'x', 'd', 'v'}, 'v': {'c', 'f', 'b'}, 'b': {'v', 'g', 'n'},
         'n': {'b', 'h', 'm'}, 'm': {'n', 'j'}
     }
 
     odleglosc = 0
-    # porównujemy znaki z małych liter
     for c1, c2 in zip(s1.lower(), s2.lower()):
-
         if c1 == c2:
-            continue  # identyczne znaki nie zwiększają odległości
+            continue
 
-        if c2 in klawiatura.get(c1, set()):
+        # Obsługa przypadkowego wciśnięcia Alt (losowy koszt 1-2)
+        if random.random() < 0.1:  # 10% szans na przypadkowe wciśnięcie Alt
+            odleglosc += random.randint(1, 2)
+            continue
 
-            odleglosc += 1  # sąsiednie znaki
-
+        if c1 in klawiatura and c2 in klawiatura[c1]:
+            odleglosc += 1
         else:
-            odleglosc += 2  # różne znaki
+            odleglosc += 2
 
     return odleglosc
 
-
-#c
-
-
-# przykładowy słownik 100 słów
-# różne długości słów, polskie rzeczowniki i produkty
-# (skrócony komentarz, pełna lista poniżej)
-
+# Zadanie 1c: Słownik i wyszukiwanie podobnych słów
 slownik = [
     "mama", "tata", "dom", "kot", "pies", "nawa", "lampa", "krzesło",
     "książka", "komputer", "telefon", "szklanka", "okno", "drzwi", "samochód",
@@ -83,17 +66,17 @@ slownik = [
     "pomidor", "ogórek", "cebula", "czosnek", "papryka", "sałata", "kapusta", "kalafior",
     "brokuł", "dynia", "bakłażan", "szpinak", "rzodkiewka", "fasola", "groch", "soczewica",
     "ryż", "makaron", "chleb", "bułka", "ser", "mleko", "masło", "jogurt", "kefir",
-    "szynka", "kiełbasa", "jajko", "sok", "woda", "herbata", "kawa", "piwo", "wino" ]
+    "szynka", "kiełbasa", "jajko", "sok", "woda", "herbata", "kawa", "piwo", "wino"
+]
 
-
-# funkcja znajduje najbardziej podobne słowa ze słownika na podstawie odległości Hamminga (zmodyfikowanej)
 def znajdz_podobne_slowa(slowo_wejsciowe):
+    # Sprawdź czy słowo istnieje w słowniku (bez ogonków)
     slowo_bez_ogonkow = usun_polskie_znaki(slowo_wejsciowe).lower()
-
     for slowo in slownik:
         if usun_polskie_znaki(slowo).lower() == slowo_bez_ogonkow:
             return "OK"
 
+    # Oblicz odległość Levenshteina do wszystkich słów
     podobne = []
     for slowo in slownik:
         s1 = usun_polskie_znaki(slowo_wejsciowe).lower()
@@ -101,31 +84,27 @@ def znajdz_podobne_slowa(slowo_wejsciowe):
         odleglosc = Levenshteina_odleglosc(s1, s2)
         podobne.append((odleglosc, slowo))
 
-    # sortujemy po odległości
+    # Posortuj i zwróć 3 najbardziej podobne
     podobne.sort()
     return [slowo for _, slowo in podobne[:3]]
 
-
-#zadanie 2
-#a
-
-# częstości liter dla 3 języków (procentowy udział liter)
+# Zadanie 2: Częstość znaków
 czestosci = {
-    'polish': {
+    'polski': {
         'a': 8.91, 'b': 1.47, 'c': 3.96, 'd': 3.25, 'e': 7.66,
         'f': 0.30, 'g': 1.42, 'h': 1.08, 'i': 8.21, 'j': 2.28,
         'k': 3.51, 'l': 2.10, 'm': 2.80, 'n': 5.52, 'o': 7.75,
         'p': 3.13, 'q': 0.14, 'r': 4.69, 's': 4.32, 't': 3.98,
         'u': 2.50, 'v': 0.04, 'w': 4.65, 'x': 0.02, 'y': 3.76, 'z': 5.64
     },
-    'english': {
+    'angielski': {
         'a': 8.167, 'b': 1.492, 'c': 2.782, 'd': 4.253, 'e': 12.702,
         'f': 2.228, 'g': 2.015, 'h': 6.094, 'i': 6.966, 'j': 0.153,
         'k': 0.772, 'l': 4.025, 'm': 2.406, 'n': 6.749, 'o': 7.507,
         'p': 1.929, 'q': 0.095, 'r': 5.987, 's': 6.327, 't': 9.056,
         'u': 2.758, 'v': 0.978, 'w': 2.360, 'x': 0.150, 'y': 1.974, 'z': 0.074
     },
-    'german': {
+    'niemiecki': {
         'a': 6.51, 'b': 1.89, 'c': 3.06, 'd': 5.08, 'e': 17.40,
         'f': 1.66, 'g': 3.01, 'h': 4.76, 'i': 7.55, 'j': 0.27,
         'k': 1.21, 'l': 3.44, 'm': 2.53, 'n': 9.78, 'o': 2.51,
@@ -134,17 +113,11 @@ czestosci = {
     }
 }
 
-samogloski = {'a', 'e', 'i', 'o', 'u', 'y'}  # zestaw samogłosek
+samogloski = {'a', 'e', 'i', 'o', 'u', 'y'}
 
-
-
-#b
-
-# funkcja zamienia tekst na procentowy rozkład liter
 def tekst_na_czestosc(tekst):
     tekst = usun_polskie_znaki(tekst).lower()
-    tekst = ''.join(c for c in tekst if c.isalpha())     # tylko litery, małe
-
+    tekst = ''.join(c for c in tekst if c.isalpha())
     lacznie = len(tekst) or 1
     czestosci_dict = defaultdict(float)
     for c in tekst:
@@ -153,10 +126,6 @@ def tekst_na_czestosc(tekst):
         czestosci_dict[c] = (czestosci_dict[c] / lacznie) * 100
     return dict(czestosci_dict)
 
-
-# funkcja porównuje rozkład liter z językiem
-# im mniejsza suma różnic, tym bliżej
-
 def porownaj_czestosc(czestosci_tekstu, czestosci_jezyk):
     odleglosc = 0
     wszystkie_litery = set(czestosci_tekstu.keys()) | set(czestosci_jezyk.keys())
@@ -164,8 +133,6 @@ def porownaj_czestosc(czestosci_tekstu, czestosci_jezyk):
         odleglosc += abs(czestosci_tekstu.get(litera, 0) - czestosci_jezyk.get(litera, 0))
     return odleglosc
 
-
-# funkcja rozpoznająca język na podstawie częstości liter
 def wykryj_jezyk(tekst):
     czestosci_tekstu = tekst_na_czestosc(tekst)
     min_odleglosc = float('inf')
@@ -177,10 +144,7 @@ def wykryj_jezyk(tekst):
             najlepszy_jezyk = jezyk
     return najlepszy_jezyk.capitalize()
 
-
-#c
-
-# funkcja uproszczona - zlicza tylko samogłoski i spółgłoski
+# Zadanie 2c: Uproszczona analiza
 def uproszczona_czestosc(tekst):
     tekst = usun_polskie_znaki(tekst).lower()
     tekst = ''.join(c for c in tekst if c.isalpha())
@@ -188,16 +152,12 @@ def uproszczona_czestosc(tekst):
     liczba_samoglosek = sum(1 for c in tekst if c in samogloski)
     return (liczba_samoglosek / lacznie * 100, (lacznie - liczba_samoglosek) / lacznie * 100)
 
-
-# procentowe udziały samogłosek i spółgłosek dla języków
 jezyk_uproszczony = {
-    'polish': (38.5, 61.5),
-    'english': (39.9, 60.1),
-    'german': (37.2, 62.8)
+    'polski': (38.5, 61.5),
+    'angielski': (39.9, 60.1),
+    'niemiecki': (37.2, 62.8)
 }
 
-
-# funkcja wykrywa język używając tylko samogłosek/spółgłosek
 def wykryj_jezyk_uproszczony(tekst):
     samogloski_proc, spolgloski_proc = uproszczona_czestosc(tekst)
     min_odleglosc = float('inf')
@@ -209,11 +169,10 @@ def wykryj_jezyk_uproszczony(tekst):
             najlepszy_jezyk = jezyk
     return najlepszy_jezyk.capitalize()
 
+# Zadanie 3: Odległości edycyjne
+# Złożoność obliczeniowa: O(m*n) dla wszystkich funkcji
 
-#zadanie 3
-#a
-
-# najdłuższy wspólny podciąg bez przerw (substring)
+# Zadanie 3a: Najdłuższy wspólny podciąg ciągły
 def najdluzszy_wspolny_podciag_ciagly(s1, s2):
     m, n = len(s1), len(s2)
     # DP: O(m*n) pamięci i czasu
@@ -228,10 +187,7 @@ def najdluzszy_wspolny_podciag_ciagly(s1, s2):
                 dp[i][j] = 0
     return max_dlugosc
 
-
-#b
-
-# najdłuższy wspólny podciąg z przerwami (subsequence)
+# Zadanie 3b: Najdłuższy wspólny podciąg (z przerwami)
 def najdluzszy_wspolny_podciag(s1, s2):
     m, n = len(s1), len(s2)
     # DP: O(m*n) pamięci i czasu
@@ -244,10 +200,7 @@ def najdluzszy_wspolny_podciag(s1, s2):
                 dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
     return dp[m][n]
 
-
-#d
-
-# odległość Levenshteina – liczba operacji potrzebna do przekształcenia jednego ciągu w drugi
+# Zadanie 3d: Odległość Levenshteina
 def Levenshteina_odleglosc(s1, s2):
     m, n = len(s1), len(s2)
     # DP: O(m*n) pamięci i czasu
@@ -266,6 +219,7 @@ def Levenshteina_odleglosc(s1, s2):
             )
     return dp[m][n]
 
+# Testowanie
 if __name__ == "__main__":
     print("Zadanie_1a: ")
     s1="mama"
