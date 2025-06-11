@@ -13,7 +13,6 @@ def usun_polskie_znaki(tekst):
 #zadanie 1
 #a
 
-
 # funkcja obliczająca klasyczną odległość Hamminga
 # liczy ile znaków różni się między dwoma ciągami tej samej długości
 def Hamminga_odleglosc(s1, s2):
@@ -29,7 +28,6 @@ def Hamminga_odleglosc(s1, s2):
 
 
 #b
-
 
 # funkcja modyfikująca odległość Hamminga z uwzględnieniem sąsiedztwa klawiatury
 # sąsiadujące litery mają wagę 1, inne 2
@@ -68,9 +66,7 @@ def modyfikowana_Hamminga(s1, s2):
     return odleglosc
 
 
-
 #c
-
 
 # przykładowy słownik 100 słów
 # różne długości słów, polskie rzeczowniki i produkty
@@ -92,22 +88,23 @@ slownik = [
 
 # funkcja znajduje najbardziej podobne słowa ze słownika na podstawie odległości Hamminga (zmodyfikowanej)
 def znajdz_podobne_slowa(slowo_wejsciowe):
-    slowo_bez_ogonkow = usun_polskie_znaki(slowo_wejsciowe).lower()
+    slowo_norm = usun_polskie_znaki(slowo_wejsciowe).lower()
 
+    # czy jest dokładnie w słowniku?
     for slowo in slownik:
-        if usun_polskie_znaki(slowo).lower() == slowo_bez_ogonkow:
+        if usun_polskie_znaki(slowo).lower() == slowo_norm:
             return "OK"
 
     podobne = []
     for slowo in slownik:
-        s1 = usun_polskie_znaki(slowo_wejsciowe).lower()
-        s2 = usun_polskie_znaki(slowo).lower()
-        odleglosc = Levenshteina_odleglosc(s1, s2)
-        podobne.append((odleglosc, slowo))
+        slowo_slownikowe = usun_polskie_znaki(slowo).lower()
+        if len(slowo_norm) != len(slowo_slownikowe):
+            continue  # tylko słowa tej samej długości
+        odl = Hamminga_odleglosc(slowo_norm, slowo_slownikowe)
+        podobne.append((odl, slowo))
 
-    # sortujemy po odległości
     podobne.sort()
-    return [slowo for _, slowo in podobne[:3]]
+    return [slowo for _, slowo in podobne[:3]] if podobne else ["Brak podobnych słów"]
 
 
 #zadanie 2
@@ -139,8 +136,6 @@ czestosci = {
 }
 
 samogloski = {'a', 'e', 'i', 'o', 'u', 'y'}  # zestaw samogłosek
-
-
 
 #b
 
@@ -264,7 +259,6 @@ def najdluzszy_wspolny_podciag_ciagly(s1, s2):
                 dp[i][j] = 0
     return max_dlugosc
 
-
 #b
 
 # najdłuższy wspólny podciąg z przerwami (subsequence)
@@ -279,7 +273,6 @@ def najdluzszy_wspolny_podciag(s1, s2):
             else:
                 dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
     return dp[m][n]
-
 
 #d
 
