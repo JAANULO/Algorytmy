@@ -114,7 +114,7 @@ def porownaj_czestosc(tekst, czestosci_jezyka):
 def wykryj_jezyk(tekst):
 
     czestosc = tekst_na_czestosc(tekst)
-    najmniejszy = float('inf')
+    najmniejszy = 9999999
     jezyk_najlepszy = ""
 
     for jezyk in czestosci_w_jezykach:
@@ -130,11 +130,14 @@ def wykryj_jezyk(tekst):
 
 # funkcja uproszczona - zlicza tylko samogłoski i spółgłoski
 def uproszczona_czestosc(tekst):
-    tekst = usun_polskie_znaki(tekst).lower()
-    tekst = ''.join(c for c in tekst if c.isalpha())
-    lacznie = len(tekst) or 1
+    tekst = ''.join(c for c in usun_polskie_znaki(tekst).lower() if c.isalpha())
+    #male litery,bez polskich znaków
+
+    ilosc_liter_wyrazie = len(tekst) # or 1
+
     liczba_samoglosek = sum(1 for c in tekst if c in samogloski)
-    return (liczba_samoglosek / lacznie * 100, (lacznie - liczba_samoglosek) / lacznie * 100)
+
+    return (liczba_samoglosek / ilosc_liter_wyrazie * 100, (ilosc_liter_wyrazie - liczba_samoglosek) / ilosc_liter_wyrazie * 100)
 
 
 # procentowe udziały samogłosek i spółgłosek dla języków
@@ -147,14 +150,22 @@ jezyk_uproszczony = {
 
 # funkcja wykrywa język używając tylko samogłosek/spółgłosek
 def wykryj_jezyk_uproszczony(tekst):
-    samogloski_proc, spolgloski_proc = uproszczona_czestosc(tekst)
-    min_odleglosc = float('inf')
+
     najlepszy_jezyk = ''
-    for jezyk, (s, sp) in jezyk_uproszczony.items():
-        odleglosc = abs(samogloski_proc - s) + abs(spolgloski_proc - sp)
-        if odleglosc < min_odleglosc:
-            min_odleglosc = odleglosc
+    min_roznica = 9999
+    samogloski_proc, spolgloski_proc = uproszczona_czestosc(tekst)
+
+    for jezyk in jezyk_uproszczony:
+        s, sp = jezyk_uproszczony[jezyk]
+        #s- samogloski
+        #sp spolgloski
+
+        roznica = abs(samogloski_proc - s) + abs(spolgloski_proc - sp)
+
+        if roznica < min_roznica:
+            min_roznica = roznica
             najlepszy_jezyk = jezyk
+
     return najlepszy_jezyk.capitalize()
 
 

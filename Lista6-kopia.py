@@ -179,19 +179,16 @@ def tekst_na_czestosc(tekst):
 
 # Oblicza dystans między tekstem a profilem języka
 # Używamy odległości Manhattan: suma bezwzględnych różnic procentowych dla każdej litery
-def porownaj_czestosc(tekstu, wzorcowe):
-    suma_roznic = 0
+def porownaj_czestosc(tekst, czestosci_jezyka):
+    roznica = 0
 
-    #zbiór wszystkich liter występujących w obu słownikach
-    unikalne_litery = set(tekstu.keys()) | set(wzorcowe.keys())
+    for litera in czestosci_jezyka:
+        if litera in tekst:
+            roznica += abs(tekst[litera] - czestosci_jezyka[litera])
+        else:
+            roznica += abs(0 - czestosci_jezyka[litera])
 
-    #dla każdej litery liczymy różnicę częstości między tekstem a językiem
-    for litera in unikalne_litery:
-        a = tekstu.get(litera, 0)  # jeśli litery nie ma, przyjmujemy 0
-        b = wzorcowe.get(litera, 0)
-        suma_roznic += abs(a - b)  # wartość bezwzględna różnicy
-
-    return suma_roznic
+    return roznica
 
 
 # Główna funkcja – rozpoznaje język tekstu na podstawie rozkładu liter
