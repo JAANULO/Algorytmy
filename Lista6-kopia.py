@@ -114,7 +114,7 @@ def znajdz_podobne_slowa(slowo_wejsciowe):
 #a
 
 # częstości liter dla 3 języków (procentowy udział liter)
-czestosci = {
+czestosci_w_jezykach = {
     'polish': {
         'a': 8.91, 'b': 1.47, 'c': 3.96, 'd': 3.25, 'e': 7.66,
         'f': 0.30, 'g': 1.42, 'h': 1.08, 'i': 8.21, 'j': 2.28,
@@ -140,27 +140,27 @@ czestosci = {
 
 samogloski = {'a', 'e', 'i', 'o', 'u', 'y'}  # zestaw samogłosek
 
-
-
 #b
 
 # funkcja zamienia tekst na procentowy rozkład liter
 def tekst_na_czestosc(tekst):
-    # Zamieniamy polskie znaki na podstawowe i litery na małe
+
+    #zamieniana z polskich znaków oraz na litery małe
     tekst = usun_polskie_znaki(tekst).lower()
 
-    # Usuwamy wszystko, co nie jest literą (np. cyfry, interpunkcja)
+    #usuwamy wszystko, co nie jest literą (np. cyfry, interpunkcja)
     tylko_litery = ""
     for znak in tekst:
-        if znak.isalpha():
+        if znak.isalpha(): #tylko litery
             tylko_litery += znak
 
-    # Jeśli tekst był pusty lub nie zawierał liter, zwracamy pusty wynik
+
+    #jeśli tekst pusty lub bez liter -> pusty wynik
     liczba_liter = len(tylko_litery)
     if liczba_liter == 0:
         return {}
 
-    # Liczymy, ile razy występuje każda litera
+    #liczenie, ile razy występuje każda litera
     licznik = {}
     for litera in tylko_litery:
         if litera in licznik:
@@ -168,22 +168,24 @@ def tekst_na_czestosc(tekst):
         else:
             licznik[litera] = 1
 
-        # Obliczamy procentowy udział każdej litery
+    #oblicza procentowy udział każdej litery
+
+    #czestosc = ilosc litery/ wszystkie  * 100
     czestosci = {}
     for litera in licznik:
         czestosci[litera] = (licznik[litera] / liczba_liter) * 100
+    print(licznik)
     return czestosci
-
 
 # Oblicza dystans między tekstem a profilem języka
 # Używamy odległości Manhattan: suma bezwzględnych różnic procentowych dla każdej litery
 def porownaj_czestosc(tekstu, wzorcowe):
     suma_roznic = 0
 
-    # Tworzymy zbiór wszystkich liter występujących w obu słownikach
+    #zbiór wszystkich liter występujących w obu słownikach
     unikalne_litery = set(tekstu.keys()) | set(wzorcowe.keys())
 
-    # Dla każdej litery liczymy różnicę częstości między tekstem a językiem
+    #dla każdej litery liczymy różnicę częstości między tekstem a językiem
     for litera in unikalne_litery:
         a = tekstu.get(litera, 0)  # jeśli litery nie ma, przyjmujemy 0
         b = wzorcowe.get(litera, 0)
@@ -194,26 +196,17 @@ def porownaj_czestosc(tekstu, wzorcowe):
 
 # Główna funkcja – rozpoznaje język tekstu na podstawie rozkładu liter
 def wykryj_jezyk(tekst):
-    # Liczymy częstości liter w podanym tekście
-    czestosc_tekstu = tekst_na_czestosc(tekst)
+    czestosc = tekst_na_czestosc(tekst)
+    najmniejszy = float('inf')
+    jezyk_najlepszy = ""
 
-    # Zmienna do przechowywania najlepszego dopasowania
-    najlepszy = ""
-    najmniejsza_roznica = float('inf')
+    for jezyk in czestosci_w_jezykach:
+        roznica = porownaj_czestosc(czestosc, czestosci_w_jezykach[jezyk])
+        if roznica < najmniejszy:
+            najmniejszy = roznica
+            jezyk_najlepszy = jezyk
 
-    # Iterujemy po przygotowanych profilach języków (słownik: język → rozkład liter)
-    for jezyk in czestosci:  # zmienna czestosci musi zawierać dane referencyjne np. dla PL/EN/DE
-        roznica = porownaj_czestosc(czestosc_tekstu, czestosci[jezyk])
-
-        # Jeśli ta odległość jest najmniejsza – zapamiętujemy język
-        if roznica < najmniejsza_roznica:
-            najlepszy = jezyk
-            najmniejsza_roznica = roznica
-
-    # Zwracamy nazwę najlepiej dopasowanego języka (z wielkiej litery)
-    return najlepszy.capitalize()
-
-
+    return jezyk_najlepszy.capitalize()
 #c
 
 # funkcja uproszczona - zlicza tylko samogłoski i spółgłoski
@@ -319,7 +312,7 @@ if __name__ == "__main__":
     print("Podobne słowa:", znajdz_podobne_slowa("płaszczkaa"))  # ['płaszczka' jeśli w słowniku]
 
     print("\nZadanie_2b: ")
-    tekst = "Litwo ojczyzno moja ty jesteś jak zdrowie"
+    tekst = "Ala ma kota"
     print(tekst)
     print("Wykryty język:", wykryj_jezyk(tekst))  # Polski
 
