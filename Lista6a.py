@@ -247,16 +247,17 @@ def wykryj_jezyk_uproszczony(tekst):
 
 #zadanie 3
 #a
-
-# najdłuższy wspólny podciąg bez przerw (substring)
+#najdłuższy wspólny podciąg bez przerw (substring)
 def najdluzszy_wspolny_podciag_ciagly(s1, s2):
     m, n = len(s1), len(s2)
-    # DP: O(m*n) pamięci i czasu
+
     dp = [[0] * (n + 1) for _ in range(m + 1)]
     max_dlugosc = 0
+
     for i in range(1, m + 1):
         for j in range(1, n + 1):
             if s1[i - 1] == s2[j - 1]:
+
                 dp[i][j] = dp[i - 1][j - 1] + 1
                 max_dlugosc = max(max_dlugosc, dp[i][j])
             else:
@@ -264,8 +265,7 @@ def najdluzszy_wspolny_podciag_ciagly(s1, s2):
     return max_dlugosc
 
 #b
-
-# najdłuższy wspólny podciąg z przerwami (subsequence)
+#najdłuższy wspólny podciąg z przerwami (subsequence)
 def najdluzszy_wspolny_podciag(s1, s2):
     m, n = len(s1), len(s2)
     # DP: O(m*n) pamięci i czasu
@@ -279,11 +279,10 @@ def najdluzszy_wspolny_podciag(s1, s2):
     return dp[m][n]
 
 #d
-
-# odległość Levenshteina – liczba operacji potrzebna do przekształcenia jednego ciągu w drugi
+#odległość Levenshteina – liczba operacji potrzebna do przekształcenia jednego ciągu w drugi
 def Levenshteina_odleglosc(s1, s2):
     m, n = len(s1), len(s2)
-    # DP: O(m*n) pamięci i czasu
+
     dp = [[0] * (n + 1) for _ in range(m + 1)]
     for i in range(m + 1):
         dp[i][0] = i
@@ -293,10 +292,11 @@ def Levenshteina_odleglosc(s1, s2):
         for j in range(1, n + 1):
             koszt = 0 if s1[i - 1] == s2[j - 1] else 1
             dp[i][j] = min(
-                dp[i - 1][j] + 1,      # Usunięcie
-                dp[i][j - 1] + 1,      # Wstawienie
-                dp[i - 1][j - 1] + koszt  # Zamiana
+                dp[i - 1][j] + 1,      #wsunięcie
+                dp[i][j - 1] + 1,      #wstawienie
+                dp[i - 1][j - 1] + koszt  #zamiana
             )
+
     return dp[m][n]
 
 if __name__ == "__main__":
@@ -324,10 +324,19 @@ if __name__ == "__main__":
     print("Wykryty język (uproszczony):", wykryj_jezyk_uproszczony(tekst))  # Polski
 
     print("\nZadanie_3a: ")
-    print("Najdłuższy wspólny podciąg ciągły:", najdluzszy_wspolny_podciag_ciagly("konwalia", "zawalina"))  # 4
+    s1="konwalia"
+    s2="zawalina"
+    print(s1,s2)
+    print("Najdłuższy wspólny podciąg ciągły:", najdluzszy_wspolny_podciag_ciagly(s1, s2))  # 4
 
     print("\nZadanie_3b: ")
-    print("Najdłuższy wspólny podciąg:", najdluzszy_wspolny_podciag("ApqBCrDeFt", "tABuCoDewxFyz"))  # 6
+    s1="ApqBCrDeFt"
+    s2="tABuCoDewxFyz"
+    print(s1, s2)
+    print("Najdłuższy wspólny podciąg:", najdluzszy_wspolny_podciag(s1,s2))  # 6
 
     print("\nZadanie_3d: ")
-    print("Levenshteina odległość:", Levenshteina_odleglosc("kitten", "sitting"))  # 3
+    s1 = "kitten"
+    s2 = "sitting"
+    print(s1, s2)
+    print("Levenshteina odległość:", Levenshteina_odleglosc(s1,s2))  # 3
