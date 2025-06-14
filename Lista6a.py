@@ -13,8 +13,8 @@ def usun_polskie_znaki(tekst):
 #zadanie 1
 #a
 
-# funkcja obliczająca klasyczną odległość Hamminga
-# liczy ile znaków różni się między dwoma ciągami tej samej długości
+#funkcja obliczająca klasyczną odległość Hamminga
+#liczy ile znaków różni się między dwoma ciągami tej samej długości
 def Hamminga_odleglosc(s1, s2):
     if len(s1) != len(s2):  # ciągi muszą być tej samej długości
         raise ValueError("Ciągi muszą być tej samej długości")
@@ -29,8 +29,8 @@ def Hamminga_odleglosc(s1, s2):
 
 #b
 
-# funkcja modyfikująca odległość Hamminga z uwzględnieniem sąsiedztwa klawiatury
-# sąsiadujące litery mają wagę 1, inne 2
+#funkcja modyfikująca odległość Hamminga z uwzględnieniem sąsiedztwa klawiatury
+#sąsiadujące litery mają wagę 1, inne 2
 def modyfikowana_Hamminga(s1, s2):
     if len(s1) != len(s2): # ciągi muszą być tej samej długości
         raise ValueError("Ciągi muszą być tej samej długości")
@@ -68,8 +68,8 @@ def modyfikowana_Hamminga(s1, s2):
 
 #c
 
-# przykładowy słownik 100 słów
-# różne długości słów, polskie rzeczowniki i produkty
+#przykładowy słownik 100 słów
+#różne długości słów, polskie rzeczowniki i produkty
 
 slownik = [
     "mama", "tata", "dom", "kot", "pies", "nawa", "lampa", "krzesło",
@@ -86,7 +86,7 @@ slownik = [
     "szynka", "kiełbasa", "jajko", "sok", "woda", "herbata", "kawa", "piwo", "wino" ]
 
 
-# funkcja znajduje najbardziej podobne słowa ze słownika na podstawie odległości Hamminga (zmodyfikowanej)
+#funkcja znajduje najbardziej podobne słowa ze słownika na podstawie odległości Hamminga (zmodyfikowanej)
 def znajdz_podobne_slowa(slowo_wejsciowe):
     slowo_norm = usun_polskie_znaki(slowo_wejsciowe).lower()
 
@@ -110,7 +110,7 @@ def znajdz_podobne_slowa(slowo_wejsciowe):
 #zadanie 2
 #a
 
-# częstości liter dla 3 języków (procentowy udział liter)
+#częstości liter dla 3 języków (procentowy udział liter)
 czestosci_w_jezykach = {
     'polish': {
         'a': 8.91, 'b': 1.47, 'c': 3.96, 'd': 3.25, 'e': 7.66,
@@ -205,7 +205,7 @@ def wykryj_jezyk(tekst):
 
 #c
 
-# funkcja uproszczona - zlicza tylko samogłoski i spółgłoski
+#funkcja uproszczona - zlicza tylko samogłoski i spółgłoski
 def uproszczona_czestosc(tekst):
     tekst = ''.join(c for c in usun_polskie_znaki(tekst).lower() if c.isalpha())
     #male litery,bez polskich znaków
@@ -217,15 +217,14 @@ def uproszczona_czestosc(tekst):
     return (liczba_samoglosek / ilosc_liter_wyrazie * 100, (ilosc_liter_wyrazie - liczba_samoglosek) / ilosc_liter_wyrazie * 100)
 
 
-
-# procentowe udziały samogłosek i spółgłosek dla języków
+#procentowe udziały samogłosek i spółgłosek dla języków
 jezyk_uproszczony = {
     'polish': (38.5, 61.5),
     'english': (39.9, 60.1),
     'german': (37.2, 62.8) }
 
 
-# funkcja wykrywa język używając tylko samogłosek/spółgłosek
+#funkcja wykrywa język używając tylko samogłosek/spółgłosek
 def wykryj_jezyk_uproszczony(tekst):
     najlepszy_jezyk = ''
     min_roznica = 9999
@@ -248,17 +247,19 @@ def wykryj_jezyk_uproszczony(tekst):
 #zadanie 3
 #a
 #najdłuższy wspólny podciąg bez przerw (substring)
-def najdluzszy_wspolny_podciag_ciagly(s1, s2):
-    m, n = len(s1), len(s2)
+def najdluzszy_wspolny_podciag_bez_przerw(s1, s2):
+    dl1, dl2 = len(s1), len(s2)
 
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    dp = [[0] * (dl2 + 1) for _ in range(dl1 + 1)]
     max_dlugosc = 0
 
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
+    for i in range(1, dl1 + 1):
+        for j in range(1, dl2 + 1):
+
             if s1[i - 1] == s2[j - 1]:
 
                 dp[i][j] = dp[i - 1][j - 1] + 1
+
                 max_dlugosc = max(max_dlugosc, dp[i][j])
             else:
                 dp[i][j] = 0
@@ -266,17 +267,22 @@ def najdluzszy_wspolny_podciag_ciagly(s1, s2):
 
 #b
 #najdłuższy wspólny podciąg z przerwami (subsequence)
-def najdluzszy_wspolny_podciag(s1, s2):
-    m, n = len(s1), len(s2)
-    # DP: O(m*n) pamięci i czasu
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
+def najdluzszy_wspolny_podciag_z_przerwami(s1, s2):
+    dl1, dl2 = len(s1), len(s2)
+
+    dp = [ [0] * (dl1 + 1) for _ in range(dl2 + 1)]
+
+    for i in range(1, dl2 + 1):
+
+        for j in range(1, dl1 + 1):
+
             if s1[i - 1] == s2[j - 1]:
                 dp[i][j] = dp[i - 1][j - 1] + 1
+
             else:
-                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
-    return dp[m][n]
+                dp[i][j] = max( dp[i - 1][j] , dp[i][j - 1] )
+
+    return dp[dl2][dl1]
 
 #d
 #odległość Levenshteina – liczba operacji potrzebna do przekształcenia jednego ciągu w drugi
@@ -327,13 +333,13 @@ if __name__ == "__main__":
     s1="konwalia"
     s2="zawalina"
     print(s1,s2)
-    print("Najdłuższy wspólny podciąg ciągły:", najdluzszy_wspolny_podciag_ciagly(s1, s2))  # 4
+    print("Najdłuższy wspólny podciąg ciągły:", najdluzszy_wspolny_podciag_bez_przerw(s1, s2))  # 4
 
     print("\nZadanie_3b: ")
     s1="ApqBCrDeFt"
     s2="tABuCoDewxFyz"
     print(s1, s2)
-    print("Najdłuższy wspólny podciąg:", najdluzszy_wspolny_podciag(s1,s2))  # 6
+    print("Najdłuższy wspólny podciąg:", najdluzszy_wspolny_podciag_z_przerwami(s1,s2))  # 6
 
     print("\nZadanie_3d: ")
     s1 = "kitten"
