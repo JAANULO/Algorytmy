@@ -1,7 +1,5 @@
 #lista6
-
 import unicodedata
-
 
 #usuwanie polskich znaków
 def usun_polskie_znaki(tekst):
