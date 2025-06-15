@@ -90,7 +90,7 @@ def znajdz_podobne_slowa(slowo_wejsciowe):
 
     slowo_norm = usun_polskie_znaki(slowo_wejsciowe).lower()
 
-    #czy jest dokładnie w słowniku?
+    #czy jest dokładnie w słowniku
     for slowo in slownik:
         if usun_polskie_znaki(slowo).lower() == slowo_norm:
             return "OK"
@@ -98,13 +98,22 @@ def znajdz_podobne_slowa(slowo_wejsciowe):
     podobne = []
     for slowo in slownik:
         slowo_slownikowe = usun_polskie_znaki(slowo).lower()
+
         if len(slowo_norm) != len(slowo_slownikowe):
             continue  # tylko słowa tej samej długości
         odl = Hamminga_odleglosc(slowo_norm, slowo_slownikowe)
+
         podobne.append((odl, slowo))
 
     podobne.sort()
-    return [slowo for _, slowo in podobne[:3]] if podobne else ["Brak podobnych słów"]
+
+    if podobne: #jesli lista nie jest pusta
+        najlepsze = []
+        for _, slowo in podobne[:3]:
+            najlepsze.append(slowo)
+        return najlepsze
+    else:
+        return ["Brak podobnych słów"]
 
 if __name__ == "__main__":
     print("Zadanie_1a: ")
