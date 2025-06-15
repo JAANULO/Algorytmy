@@ -87,9 +87,10 @@ slownik = [
 
 #funkcja znajduje najbardziej podobne słowa ze słownika na podstawie odległości Hamminga (zmodyfikowanej)
 def znajdz_podobne_slowa(slowo_wejsciowe):
+
     slowo_norm = usun_polskie_znaki(slowo_wejsciowe).lower()
 
-    # czy jest dokładnie w słowniku?
+    #czy jest dokładnie w słowniku?
     for slowo in slownik:
         if usun_polskie_znaki(slowo).lower() == slowo_norm:
             return "OK"
@@ -117,5 +118,6 @@ if __name__ == "__main__":
     print("Modyfikowana Hamminga:", modyfikowana_Hamminga("mama", "nawa"))  # 3
 
     print("\nZadanie 1c: ")
-    print("Podobne słowa:", znajdz_podobne_slowa("maaa"))  # ['mama', 'tata', 'nawa']
-    print("Podobne słowa:", znajdz_podobne_slowa("płaszczkaa"))  # ['płaszczka' jeśli w słowniku]
+    slowo_wejsciowe="mamaa"
+    print(slowo_wejsciowe)
+    print("Podobne słowa:", znajdz_podobne_slowa(slowo_wejsciowe))  # ['mama', 'tata', 'nawa']
