@@ -2,82 +2,120 @@
 
 import unicodedata
 
-#zadanie 3
+#usuwanie polskich znaków
+def usun_polskie_znaki(tekst):
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', tekst)
+        if unicodedata.category(c) != 'Mn' )
+
+
+#zadanie 1
 #a
-#najdłuższy wspólny podciąg bez przerw (substring)
-def najdluzszy_wspolny_podciag_bez_przerw(s1, s2):
-    dl1, dl2 = len(s1), len(s2)
 
-    dp = [[0] * (dl2 + 1) for _ in range(dl1 + 1)]
-    max_dlugosc = 0
+#funkcja obliczająca klasyczną odległość Hamminga
+#liczy ile znaków różni się między dwoma ciągami tej samej długości
+def Hamminga_odleglosc(s1, s2):
+    if len(s1) != len(s2):  # ciągi muszą być tej samej długości
+        raise ValueError("Ciągi muszą być tej samej długości")
 
-    for i in range(1, dl1 + 1):
-        for j in range(1, dl2 + 1):
 
-            if s1[i - 1] == s2[j - 1]:
+    odleglosc = 0
+    for i in range(len(s1)): # zliczamy ile razy znaki na tych samych pozycjach się różnią
+        if s1[i] != s2[i]:
+            odleglosc += 1
+    return odleglosc
 
-                dp[i][j] = dp[i - 1][j - 1] + 1
-
-                max_dlugosc = max(max_dlugosc, dp[i][j])
-            else:
-                dp[i][j] = 0
-    return max_dlugosc
 
 #b
-#najdłuższy wspólny podciąg z przerwami (subsequence)
-def najdluzszy_wspolny_podciag_z_przerwami(s1, s2):
-    dl1, dl2 = len(s1), len(s2)
 
-    dp = [ [0] * (dl1 + 1) for _ in range(dl2 + 1)]
+#funkcja modyfikująca odległość Hamminga z uwzględnieniem sąsiedztwa klawiatury
+#sąsiadujące litery mają wagę 1, inne 2
+def modyfikowana_Hamminga(s1, s2):
+    if len(s1) != len(s2): # ciągi muszą być tej samej długości
+        raise ValueError("Ciągi muszą być tej samej długości")
 
-    for i in range(1, dl2 + 1):
+    klawiatura = { #litery obok siebie
+        'q': {'w', 'a'}, 'w': {'q', 'e', 's'}, 'e': {'w', 'r', 'd'},
+        'r': {'e', 't', 'f'}, 't': {'r', 'y', 'g'}, 'y': {'t', 'u', 'h'},
+        'u': {'y', 'i', 'j'}, 'i': {'u', 'o', 'k'}, 'o': {'i', 'p', 'l'},
+        'p': {'o'},
+        'a': {'q', 's', 'z'}, 's': {'a', 'w', 'd', 'x'},
+        'd': {'s', 'e', 'f', 'c'}, 'f': {'d', 'r', 'g', 'v'},
+        'g': {'f', 't', 'h', 'b'}, 'h': {'g', 'y', 'j', 'n'},
+        'j': {'h', 'u', 'k', 'm'}, 'k': {'j', 'i', 'l'},
+        'l': {'k', 'o'},
+        'z': {'a', 'x'}, 'x': {'z', 's', 'c'},
+        'c': {'x', 'd', 'v'}, 'v': {'c', 'f', 'b'}, 'b': {'v', 'g', 'n'},
+        'n': {'b', 'h', 'm'}, 'm': {'n', 'j'} }
 
-        for j in range(1, dl1 + 1):
+    s1 = s1.lower()
+    s2 = s2.lower()
+    odleglosc = 0
 
-            if s1[i - 1] == s2[j - 1]:
-                dp[i][j] = dp[i - 1][j - 1] + 1
+    for i in range(len(s1)):
 
-            else:
-                dp[i][j] = max( dp[i - 1][j] , dp[i][j - 1] )
+        if s1[i] == s2[i]:
+            continue
 
-    return dp[dl2][dl1]
+        if s2[i] in klawiatura.get(s1[i], set()):
+            odleglosc += 1
+        else:
+            odleglosc += 2
 
-#d
-#odległość Levenshteina – liczba operacji potrzebna do przekształcenia jednego ciągu w drugi
-def Levenshteina_odleglosc(s1, s2):
-    m, n = len(s1), len(s2)
+    return odleglosc
 
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
-    for i in range(m + 1):
-        dp[i][0] = i
-    for j in range(n + 1):
-        dp[0][j] = j
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
-            koszt = 0 if s1[i - 1] == s2[j - 1] else 1
-            dp[i][j] = min(
-                dp[i - 1][j] + 1,      #wsunięcie
-                dp[i][j - 1] + 1,      #wstawienie
-                dp[i - 1][j - 1] + koszt  #zamiana
-            )
 
-    return dp[m][n]
+#c
+
+#przykładowy słownik 100 słów
+#różne długości słów, polskie rzeczowniki i produkty
+
+slownik = [
+    "mama", "tata", "dom", "kot", "pies", "nawa", "lampa", "krzesło",
+    "książka", "komputer", "telefon", "szklanka", "okno", "drzwi", "samochód",
+    "rower", "kwiat", "ławka", "ściana", "dach", "lato", "zima", "wiosna", "jesień",
+    "śnieg", "deszcz", "słońce", "księżyc", "gwiazda", "morze", "góry", "las",
+    "rzeka", "ptak", "ryba", "żaba", "wąż", "motyl", "pszczoła", "mrówka", "mysz",
+    "krowa", "koń", "świnia", "kura", "kogut", "indyk", "kaczka", "gęś", "jabłko",
+    "gruszka", "śliwka", "truskawka", "malina", "porzeczka", "winogrono", "banan",
+    "pomarańcza", "cytryna", "mandarynka", "arbuz", "ananas", "marchewka", "ziemniak",
+    "pomidor", "ogórek", "cebula", "czosnek", "papryka", "sałata", "kapusta", "kalafior",
+    "brokuł", "dynia", "bakłażan", "szpinak", "rzodkiewka", "fasola", "groch", "soczewica",
+    "ryż", "makaron", "chleb", "bułka", "ser", "mleko", "masło", "jogurt", "kefir",
+    "szynka", "kiełbasa", "jajko", "sok", "woda", "herbata", "kawa", "piwo", "wino" ]
+
+
+#funkcja znajduje najbardziej podobne słowa ze słownika na podstawie odległości Hamminga (zmodyfikowanej)
+def znajdz_podobne_slowa(slowo_wejsciowe):
+    slowo_norm = usun_polskie_znaki(slowo_wejsciowe).lower()
+
+    # czy jest dokładnie w słowniku?
+    for slowo in slownik:
+        if usun_polskie_znaki(slowo).lower() == slowo_norm:
+            return "OK"
+
+    podobne = []
+    for slowo in slownik:
+        slowo_slownikowe = usun_polskie_znaki(slowo).lower()
+        if len(slowo_norm) != len(slowo_slownikowe):
+            continue  # tylko słowa tej samej długości
+        odl = Hamminga_odleglosc(slowo_norm, slowo_slownikowe)
+        podobne.append((odl, slowo))
+
+    podobne.sort()
+    return [slowo for _, slowo in podobne[:3]] if podobne else ["Brak podobnych słów"]
 
 if __name__ == "__main__":
-    print("\nZadanie_3a: ")
-    s1="konwaliab"
-    s2="zawalinab"
-    print(s1,s2)
-    print("Najdłuższy wspólny podciąg ciągły:", najdluzszy_wspolny_podciag_bez_przerw(s1, s2))  # 4
-
-    print("\nZadanie_3b: ")
-    s1="ApqBCrDeFt"
-    s2="tABuCoDewxFyz"
+    print("Zadanie_1a: ")
+    s1 = "mama"
+    s2 = "nawa"
     print(s1, s2)
-    print("Najdłuższy wspólny podciąg:", najdluzszy_wspolny_podciag_z_przerwami(s1,s2))  # 6
+    print("Hamminga odległość:", Hamminga_odleglosc(s1, s2))  # 3
 
-    print("\nZadanie_3d: ")
-    s1 = "kitten"
-    s2 = "sitting"
+    print("\nZadanie 1b: ")
     print(s1, s2)
-    print("Levenshteina odległość:", Levenshteina_odleglosc(s1,s2))  # 3
+    print("Modyfikowana Hamminga:", modyfikowana_Hamminga("mama", "nawa"))  # 3
+
+    print("\nZadanie 1c: ")
+    print("Podobne słowa:", znajdz_podobne_slowa("maaa"))  # ['mama', 'tata', 'nawa']
+    print("Podobne słowa:", znajdz_podobne_slowa("płaszczkaa"))  # ['płaszczka' jeśli w słowniku]

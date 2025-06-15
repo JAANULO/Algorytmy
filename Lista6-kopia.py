@@ -275,22 +275,29 @@ def najdluzszy_wspolny_podciag(s1, s2):
 
 # odległość Levenshteina – liczba operacji potrzebna do przekształcenia jednego ciągu w drugi
 def Levenshteina_odleglosc(s1, s2):
-    m, n = len(s1), len(s2)
-    # DP: O(m*n) pamięci i czasu
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
-    for i in range(m + 1):
+    dl1, dl2 = len(s1), len(s2)
+
+    dp = [[0] * (dl2 + 1) for _ in range(dl1 + 1)]
+
+    for i in range(dl1 + 1):
         dp[i][0] = i
-    for j in range(n + 1):
+
+    for j in range(dl2 + 1):
         dp[0][j] = j
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
-            koszt = 0 if s1[i - 1] == s2[j - 1] else 1
-            dp[i][j] = min(
-                dp[i - 1][j] + 1,      # Usunięcie
-                dp[i][j - 1] + 1,      # Wstawienie
-                dp[i - 1][j - 1] + koszt  # Zamiana
-            )
-    return dp[m][n]
+
+    for i in range(1, dl1 + 1):
+        for j in range(1, dl2 + 1):
+
+            if s1[i - 1] == s2[j - 1]:
+                koszt = 0
+            if s1[i - 1] != s2[j - 1]:
+                koszt = 1
+
+            dp[i][j] = min( dp[i - 1][j - 1] + koszt,  #zamiana
+            dp[i - 1][j] + 1,       #usuniecue
+            dp[i][j - 1] + 1)      #wstawianie
+
+    return dp[dl1][dl2]
 
 if __name__ == "__main__":
     print("Zadanie_1a: ")

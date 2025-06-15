@@ -270,11 +270,11 @@ def najdluzszy_wspolny_podciag_bez_przerw(s1, s2):
 def najdluzszy_wspolny_podciag_z_przerwami(s1, s2):
     dl1, dl2 = len(s1), len(s2)
 
-    dp = [ [0] * (dl1 + 1) for _ in range(dl2 + 1)]
+    dp = [ [0] * (dl2 + 1) for _ in range(dl1 + 1)]
 
-    for i in range(1, dl2 + 1):
+    for i in range(1, dl1 + 1):
 
-        for j in range(1, dl1 + 1):
+        for j in range(1, dl2 + 1):
 
             if s1[i - 1] == s2[j - 1]:
                 dp[i][j] = dp[i - 1][j - 1] + 1
@@ -282,28 +282,34 @@ def najdluzszy_wspolny_podciag_z_przerwami(s1, s2):
             else:
                 dp[i][j] = max( dp[i - 1][j] , dp[i][j - 1] )
 
-    return dp[dl2][dl1]
+    return dp[dl1][dl2]
 
 #d
 #odległość Levenshteina – liczba operacji potrzebna do przekształcenia jednego ciągu w drugi
 def Levenshteina_odleglosc(s1, s2):
-    m, n = len(s1), len(s2)
+    dl1, dl2 = len(s1), len(s2)
 
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
-    for i in range(m + 1):
+    dp = [[0] * (dl2 + 1) for _ in range(dl1 + 1)]
+
+    for i in range(dl1 + 1):
         dp[i][0] = i
-    for j in range(n + 1):
-        dp[0][j] = j
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
-            koszt = 0 if s1[i - 1] == s2[j - 1] else 1
-            dp[i][j] = min(
-                dp[i - 1][j] + 1,      #wsunięcie
-                dp[i][j - 1] + 1,      #wstawienie
-                dp[i - 1][j - 1] + koszt  #zamiana
-            )
 
-    return dp[m][n]
+    for j in range(dl2 + 1):
+        dp[0][j] = j
+
+    for i in range(1, dl1 + 1):
+        for j in range(1, dl2 + 1):
+
+            if s1[i - 1] == s2[j - 1]:
+                koszt = 0
+            if s1[i - 1] != s2[j - 1]:
+                koszt = 1
+
+            dp[i][j] = min( dp[i - 1][j - 1] + koszt,  #zamiana
+            dp[i - 1][j] + 1,       #usuniecue
+            dp[i][j - 1] + 1)      #wstawianie
+
+    return dp[dl1][dl2]
 
 if __name__ == "__main__":
     print("Zadanie_1a: ")
@@ -342,7 +348,7 @@ if __name__ == "__main__":
     print("Najdłuższy wspólny podciąg:", najdluzszy_wspolny_podciag_z_przerwami(s1,s2))  # 6
 
     print("\nZadanie_3d: ")
-    s1 = "kitten"
-    s2 = "sitting"
+    s1 = "kot"
+    s2 = "pies"
     print(s1, s2)
     print("Levenshteina odległość:", Levenshteina_odleglosc(s1,s2))  # 3
