@@ -7,16 +7,13 @@ def usun_polskie_znaki(tekst):
         c for c in unicodedata.normalize('NFD', tekst)
         if unicodedata.category(c) != 'Mn' )
 
-
 #zadanie 1
 #a
-
 #funkcja obliczająca klasyczną odległość Hamminga
 #liczy ile znaków różni się między dwoma ciągami tej samej długości
 def Hamminga_odleglosc(s1, s2):
     if len(s1) != len(s2):  # ciągi muszą być tej samej długości
         raise ValueError("Ciągi muszą być tej samej długości")
-
 
     odleglosc = 0
     for i in range(len(s1)): # zliczamy ile razy znaki na tych samych pozycjach się różnią
@@ -24,9 +21,7 @@ def Hamminga_odleglosc(s1, s2):
             odleglosc += 1
     return odleglosc
 
-
 #b
-
 #modyfikuja Hamminga z uwzględnieniem sąsiedztwa klawiatury
 #sąsiadujące litery mają wagę 1, inne 2
 def modyfikowana_Hamminga(s1, s2):
@@ -69,7 +64,6 @@ def modyfikowana_Hamminga(s1, s2):
 
 
 #c
-
 #przykładowy słownik 100 słów
 #różne długości słów, polskie rzeczowniki i produkty
 
@@ -120,7 +114,6 @@ def znajdz_podobne_slowa(slowo_wejsciowe):
 
 #zadanie 2
 #a
-
 #częstości liter dla 3 języków (procentowy udział liter)
 czestosci_w_jezykach = {
     'polish': {
@@ -149,7 +142,6 @@ czestosci_w_jezykach = {
 samogloski = {'a', 'e', 'i', 'o', 'u', 'y'}  # zestaw samogłosek
 
 #b
-
 #zamiana tekstu na procentowy rozkład liter
 def tekst_na_czestosc(tekst):
 
@@ -208,14 +200,13 @@ def wykryj_jezyk(tekst):
     for jezyk in czestosci_w_jezykach:
 
         roznica = porownaj_czestosc(czestosc, czestosci_w_jezykach[jezyk])
-        if roznica < najmniejszy:
+        if roznica < najmniejszy: #szukanie najmniejszej różnicy pomiedzy zdaniem a jezykiem
             najmniejszy = roznica
             jezyk_najlepszy = jezyk
 
     return (jezyk_najlepszy)
 
 #c
-
 #funkcja uproszczona - zlicza tylko samogłoski i spółgłoski
 def uproszczona_czestosc(tekst):
     tekst = ''.join(c for c in usun_polskie_znaki(tekst).lower() if c.isalpha())
@@ -227,13 +218,11 @@ def uproszczona_czestosc(tekst):
 
     return (liczba_samoglosek / ilosc_liter_wyrazie * 100, (ilosc_liter_wyrazie - liczba_samoglosek) / ilosc_liter_wyrazie * 100)
 
-
 #procentowe udziały samogłosek i spółgłosek dla języków
 jezyk_uproszczony = {
     'polish': (38.5, 61.5),
     'english': (39.9, 60.1),
     'german': (37.2, 62.8) }
-
 
 #funkcja wykrywa język używając tylko samogłosek/spółgłosek
 def wykryj_jezyk_uproszczony(tekst):
@@ -253,7 +242,6 @@ def wykryj_jezyk_uproszczony(tekst):
             najlepszy_jezyk = jezyk
 
     return najlepszy_jezyk.capitalize()
-
 
 #zadanie 3
 #a
