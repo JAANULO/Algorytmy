@@ -56,6 +56,10 @@ def modyfikowana_Hamminga(s1, s2):
         if s1[i] == s2[i]:
             continue
 
+        # if not s2[i].isalpha():
+        #     # przypadkowy alt, @, #, itp.
+        #     odleglosc += 1.5  # mniejszy koszt niż za totalną różnicę
+
         if s2[i] in klawiatura.get(s1[i], set()):
             odleglosc += 1
         else:
